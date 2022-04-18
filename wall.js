@@ -65,14 +65,13 @@ class Walls {
     }
 
     exportToFile() {
-        donwloadLink.download = prompt("save file as: ");
-        let txt = "";
+        donwloadLink.download = prompt("save file as: ") + ".json";
+        let allCoords = [];
         for(let i = 0; i < this.walls.length; i++) {
             let coords = this.walls[i].getCoords();
-            txt += coords[0].x + ", " + coords[0].y + "; ";
-            txt += coords[1].x + ", " + coords[1].y + "\n";
+            allCoords.push(coords);
         }
-        let data = new Blob([txt], {type: 'text/plain'});
+        let data = new Blob([JSON.stringify(allCoords)], {type: 'text/plain'});
         return window.URL.createObjectURL(data);
     }
 }
@@ -89,7 +88,7 @@ class Wall {
     }
 
     getCoords() {
-        return [this.from, this.to];
+        return [this.from.x, this.from.y, this.to.x, this.to.y];
     }
 }
 

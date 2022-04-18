@@ -53,7 +53,7 @@ function draw() {
 
 function mouseClicked() {
     if(gameMode == "build") {
-        walls.addCoord(mouseX, mouseY);
+        walls.addCoord(Math.round(mouseX), Math.round(mouseY));
     }
 }
 
@@ -61,3 +61,12 @@ let donwloadLink = document.getElementById("download");
 donwloadLink.addEventListener("click", function() {
     donwloadLink.href = walls.exportToFile();
 });
+
+// let file;
+// const fileSelector = document.getElementById('selector');
+// fileSelector.addEventListener('change', (event) => {
+//     const fileList = event.target.files;
+//     file  = fileList;
+//     console.log(new FileReader().readAsText(fileList));
+// });
+    
