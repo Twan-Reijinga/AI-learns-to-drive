@@ -1,3 +1,35 @@
+class Cars {
+    constructor() {
+        this.cars = [];
+    }
+
+    addCars(x, y, amount) {
+        for(let i = 0; i < amount; i++) {
+            this.cars.push(new Car(x, y, -1/2*PI));
+        }
+    }
+
+    rotateAll(rotation) {
+        for(let i = 0; i < cars.length; i++) {
+            this.rotateCar(i, rotation)
+        } 
+    }
+
+    rotate(carNum, rotation) {
+        cars[carNum].rotate(rotation);
+    }
+
+    moveAll(direction) {
+        for(let i = 0; i < cars.length; i++) {
+            this.rotateCar(i, direction);
+        } 
+    }
+
+    move(carNum, direction) {
+        cars[carNum].move(direction);
+    }
+}
+
 class Car {
     constructor(x, y, angle) {
         this.x = x;
