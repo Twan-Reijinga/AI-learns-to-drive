@@ -1,4 +1,4 @@
-let cars = [];
+let cars;
 let walls;
 let gameMode;
 // let network;
@@ -11,8 +11,7 @@ function setup() {
     frameRate(60);
     
     walls = new Walls();
-    cars  = new Cars();
-    cars.addCars(200, 200, 1);
+    cars  = new Cars(200, 200, 1);
     gameMode = "draw";
     // network = new Network();
 }
@@ -20,13 +19,11 @@ function setup() {
 function draw() {
     background(220);
     walls.draw();
-    for(let i = 0; i < cars.length; i++) {
-        cars[i].draw();
-    }
+    cars.draw();
     
     if(gameMode == "human") {
         if(keyIsDown(UP_ARROW)) {
-            cars.moveAll(1)
+            cars.moveAll(1);
         } 
         if (keyIsDown(LEFT_ARROW)) {
             cars.rotateAll(-0.01*PI);

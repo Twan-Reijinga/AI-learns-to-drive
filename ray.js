@@ -1,3 +1,45 @@
+class Rays {
+    constructor(x, y, amount) {
+        this.rays = [];
+        this.addRays(x, y, amount);
+    }
+
+    rotate(rotation) {
+        for(let i = 0; i < this.rays.length; i++) {
+            this.rays[i].rotate(rotation);
+        }
+    }
+
+    changeLocation(x, y) {
+        for(let i = 0; i < this.rays.length; i++) {
+            this.rays[i].changeLocation(x, y);
+        }
+    }
+
+    addRays(x, y, amount) {
+        for(let angle = 1/2 * PI; angle <= 3/2 * PI; angle += PI/(amount-1)) {
+            this.rays.push(new Ray(x, y, angle));
+        }
+    }
+
+    getDistances() {
+        let shortestDistance = Infinity;
+        for(let i = 0; i < this.rays.length; i++) {
+            let newDistance = this.rays[i].getDistance();
+            if(newDistance < shortestDistance) {
+                shortestDistance = newDistance;
+            }
+        }
+        return shortestDistance;
+    }
+
+    drawIntersections() {
+        for(let i = 0; i < this.rays.length; i++) {
+            this.rays[i].drawIntersection();
+        }
+    }
+}
+
 class Ray {
     constructor(x, y, angle) {
         this.changeLocation(x, y);
@@ -56,7 +98,7 @@ class Ray {
 
     drawIntersection() {
         let distance = this.getDistance();
-        stroke(0);
+        stroke(0, 255, 0);
         let intersectionX = this.direction.x * distance;
         let intersectionY = this.direction.y * distance;
         push();

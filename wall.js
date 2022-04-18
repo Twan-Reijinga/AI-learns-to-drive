@@ -8,6 +8,10 @@ class Walls {
         for(let i = 0; i < this.walls.length; i++) {
             this.walls[i].draw();
         }
+        if(gameMode == "draw" && this.from) {
+            stroke(0);
+            line(this.from.x, this.from.y, mouseX, mouseY);
+        }
     }
 
     addCoord(x, y) {
@@ -35,7 +39,7 @@ class Walls {
     }
 
     exportToFile(filename) {
-
+        // ! WIP
     }
 }
 

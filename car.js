@@ -1,6 +1,13 @@
 class Cars {
-    constructor() {
+    constructor(x, y, amount) {
         this.cars = [];
+        this.addCars(x, y, amount);
+    }
+
+    draw() {
+        for(let i = 0; i < this.cars.length; i++) {
+            this.cars[0].draw();
+        }
     }
 
     addCars(x, y, amount) {
@@ -10,8 +17,8 @@ class Cars {
     }
 
     rotateAll(rotation) {
-        for(let i = 0; i < cars.length; i++) {
-            this.rotateCar(i, rotation)
+        for(let i = 0; i < this.cars.length; i++) {
+            this.rotate(i, rotation);
         } 
     }
 
@@ -20,8 +27,8 @@ class Cars {
     }
 
     moveAll(direction) {
-        for(let i = 0; i < cars.length; i++) {
-            this.rotateCar(i, direction);
+        for(let i = 0; i < this.cars.length; i++) {
+            this.move(i, direction);
         } 
     }
 
@@ -44,7 +51,7 @@ class Car {
         this.resistance = 1.04;
 
         this.img = loadImage('assets/car2.0.png');
-        this.rays = createRays(x, y, 7);
+        this.rays = new Rays(x, y, 7);
         this.rotate(angle);
     }
 
@@ -54,26 +61,19 @@ class Car {
         this.a.x /= this.resistance;
         this.a.y /= this.resistance;
 
-        for(let i = 0; i < this.rays.length; i++) {
-            this.rays[i].drawIntersection();
-        }
+        this.rays.drawIntersections();
+        this.rays.changeLocation(this.x, this.y);
         push();
         translate(this.x, this.y);
         rotate(this.angle + 1/2 * PI);
         imageMode(CENTER);
         image(this.img, 0, 0, this.width, this.height);
         pop();
-
-        for(let i = 0; i < this.rays.length; i++) {
-            this.rays[i].changeLocation(this.x, this.y);
-        }
     }
 
     rotate(rotation) {
         this.angle += rotation;
-        for(let i = 0; i < this.rays.length; i++) {
-            this.rays[i].rotate(rotation);
-        }
+        this.rays.rotate(rotation);
     }
 
     move(direction) {
@@ -83,11 +83,7 @@ class Car {
     }
 
     getDistances() {
-        let distances = [];
-        for(let i = 0; i < this.rays.length; i++) {
-            distances.push(this.rays[i].getDistance());
-        }
-        return distances;
+        return this.rays.getDistances();
     }
 }
 
