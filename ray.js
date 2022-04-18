@@ -17,7 +17,7 @@ class Rays {
     }
 
     addRays(x, y, amount) {
-        for(let angle = 1/2 * PI; angle <= 3/2 * PI; angle += PI/(amount-1)) {
+        for(let angle = HALF_PI; angle <= HALF_PI + PI; angle += PI/(amount-1)) {
             this.rays.push(new Ray(x, y, angle));
         }
     }
@@ -109,12 +109,4 @@ class Ray {
         line(0, 0, intersectionX, intersectionY);
         pop();
     }
-}
-
-function createRays(x, y, q) { 
-    rays = [];
-    for(let angle = 1/2 * PI; angle <= 3/2 * PI; angle += PI/(q-1)) {
-        rays.push(new Ray(x, y, angle));
-    }
-    return rays;
 }

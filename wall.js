@@ -1,5 +1,6 @@
 class Walls {
     constructor() {
+        this.previous = null;
         this.from = null;
         this.walls = [];
     }
@@ -8,21 +9,31 @@ class Walls {
         for(let i = 0; i < this.walls.length; i++) {
             this.walls[i].draw();
         }
-        if(gameMode == "draw" && this.from) {
+        if(gameMode == "draw") {
             stroke(0);
-            line(this.from.x, this.from.y, mouseX, mouseY);
+            ellipse(mouseX, mouseY, 5, 5);
+            if(this.previous && keyIsDown(16)) {
+                line(this.previous.x, this.previous.y, mouseX, mouseY);
+            } else if(this.from) {
+                line(this.from.x, this.from.y, mouseX, mouseY);
+            }
+            
         }
     }
 
     addCoord(x, y) {
         let newCoord = createVector(x, y);
         
-        if(this.from) {
-            this.walls.push(new Wall(this.from, newCoord));
+        if(this.previous && keyIsDown(16)) {
+            this.walls.push(new Wall(this.previous, newCoord));
             this.from = newCoord;
+        } else if(this.from) {
+            this.walls.push(new Wall(this.previous, newCoord));
+            this.from = null;
         } else {
             this.from = newCoord;
         }
+        this.previous = newCoord;
     }
 
     getCoords() {

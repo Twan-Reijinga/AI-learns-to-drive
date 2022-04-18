@@ -75,7 +75,7 @@ class Car {
         this.rays.drawIntersections();
         push();
         translate(this.x, this.y);
-        rotate(this.angle + 1/2 * PI);
+        rotate(this.angle + HALF_PI);
         imageMode(CENTER);
         image(this.img, 0, 0, this.width, this.height);
         pop();
@@ -109,7 +109,7 @@ class Car {
 function createCars(x, y, amount) {
     cars = [];
     for(let i = 0; i < amount; i++) {
-        cars.push(new Car(x, y, -1/2*PI));
+        cars.push(new Car(x, y, -HALF_PI));
     }
     return cars;
 }
