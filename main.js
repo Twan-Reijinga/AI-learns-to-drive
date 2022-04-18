@@ -12,7 +12,7 @@ function setup() {
     
     walls = new Walls();
     cars  = new Cars(200, 200, 1);
-    gameMode = "draw";
+    gameMode = "build";
     // network = new Network();
 }
 
@@ -38,7 +38,7 @@ function draw() {
 
     // - gameMode switch - //
     if(keyIsDown(49)) {   // 1 //
-        gameMode = "draw";
+        gameMode = "build";
     }
     if(keyIsDown(50)) {   // 2 //
         gameMode = "human"
@@ -46,10 +46,17 @@ function draw() {
     if(keyIsDown(51)) {   // 3 //
         gameMode = "selfDriving";
     }
+    if(keyIsDown(52)) {   // 4 //
+        gameMode = "import";
+    }
 }
 
 function mouseClicked() {
-    if(gameMode == "draw") {
+    if(gameMode == "build") {
         walls.addCoord(mouseX, mouseY);
     }
 }
+
+document.getElementById("download").addEventListener("click", function() {
+    document.getElementById("download").href = walls.exportToFile();
+});
