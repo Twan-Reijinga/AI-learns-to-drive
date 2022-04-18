@@ -10,10 +10,6 @@ class Walls {
         }
     }
 
-    // get() {
-    //     return this.walls;
-    // }
-
     addCoord(x, y) {
         let newCoord = createVector(x, y);
         
@@ -22,7 +18,6 @@ class Walls {
             this.from = newCoord;
         } else {
             this.from = newCoord;
-            console.log(this.from);
         }
     }
 

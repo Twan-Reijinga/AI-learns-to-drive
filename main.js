@@ -1,6 +1,6 @@
 let cars = [];
 let walls;
-let gameIsActive;
+let gameMode;
 // let network;
 
 function setup() {
@@ -12,18 +12,19 @@ function setup() {
     
     walls = new Walls();
     cars  = createCars(200, 200, 1);
-    gameIsActive = false;
+    
+    gameMode = "draw";
     // network = new Network();
 }
 
 function draw() {
-    background(255);
+    background(220);
     walls.draw();
     for(let i = 0; i < cars.length; i++) {
         cars[i].draw();
     }
-
-    if(gameIsActive) {
+    
+    if(gameMode == "human") {
         if(keyIsDown(UP_ARROW)) {
             moveCars(1);
         } 
@@ -36,6 +37,17 @@ function draw() {
         if (keyIsDown(RIGHT_ARROW)) {
             rotateCars(0.01*PI);
         }
+    }
+
+    // - gameMode switch - //
+    if(keyIsDown(49)) {   // 1 //
+        gameMode = "draw";
+    }
+    if(keyIsDown(50)) {   // 2 //
+        gameMode = "human"
+    }
+    if(keyIsDown(51)) {   // 3 //
+        gameMode = "selfDriving";
     }
 }
 
@@ -52,7 +64,7 @@ function moveCars(direction) {
 }
 
 function mouseClicked() {
-    if(!gameIsActive) {
+    if(gameMode == "draw") {
         walls.addCoord(mouseX, mouseY);
     }
 }
