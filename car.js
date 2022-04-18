@@ -16,7 +16,7 @@ class Cars {
     }
 
     rotate(carNum, rotation) {
-        cars[carNum].rotate(rotation);
+        this.cars[carNum].rotate(rotation);
     }
 
     moveAll(direction) {
@@ -26,7 +26,7 @@ class Cars {
     }
 
     move(carNum, direction) {
-        cars[carNum].move(direction);
+        this.cars[carNum].move(direction);
     }
 }
 
