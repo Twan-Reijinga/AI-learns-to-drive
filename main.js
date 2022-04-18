@@ -57,6 +57,7 @@ function mouseClicked() {
     }
 }
 
-document.getElementById("download").addEventListener("click", function() {
-    document.getElementById("download").href = walls.exportToFile();
+let donwloadLink = document.getElementById("download");
+donwloadLink.addEventListener("click", function() {
+    donwloadLink.href = walls.exportToFile();
 });

@@ -18,7 +18,6 @@ class Walls {
             let next = i+1;
             if(next == coords.length) { next = 0; }
             let wall = new Wall(coords[i], coords[next]);
-            console.log(wall);
             this.walls.push(wall);
         }
     }
@@ -66,6 +65,7 @@ class Walls {
     }
 
     exportToFile() {
+        donwloadLink.download = prompt("save file as: ");
         let txt = "";
         for(let i = 0; i < this.walls.length; i++) {
             let coords = this.walls[i].getCoords();
