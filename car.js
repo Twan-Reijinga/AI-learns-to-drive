@@ -4,9 +4,9 @@ class Cars {
         this.addCars(x, y, amount);
     }
 
-    draw() {
+    update() {
         for(let i = 0; i < this.cars.length; i++) {
-            this.cars[0].draw();
+            this.cars[0].update();
         }
     }
 
@@ -53,16 +53,26 @@ class Car {
         this.img = loadImage('assets/car2.0.png');
         this.rays = new Rays(x, y, 7);
         this.rotate(angle);
+        this.isCrashed = false;
+    }
+
+    update() {
+        if(this.isCrashed || this.isCrashing()) {
+            this.isCrashed = true;
+        }
+        if(!this.isCrashed) {
+            this.x += this.a.x;
+            this.y += this.a.y;
+            this.a.x /= this.resistance;
+            this.a.y /= this.resistance;
+
+            this.rays.changeLocation(this.x, this.y);
+            this.draw();
+        }
     }
 
     draw() {
-        this.x += this.a.x;
-        this.y += this.a.y;
-        this.a.x /= this.resistance;
-        this.a.y /= this.resistance;
-
         this.rays.drawIntersections();
-        this.rays.changeLocation(this.x, this.y);
         push();
         translate(this.x, this.y);
         rotate(this.angle + 1/2 * PI);
@@ -84,6 +94,15 @@ class Car {
 
     getDistances() {
         return this.rays.getDistances();
+    }
+
+    isCrashing() {
+        const crashDistance = 15;
+        let distance = this.rays.getShortestDistance();
+        if(distance < crashDistance) {
+            return true;
+        }
+        return false;
     }
 }
 

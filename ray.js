@@ -23,14 +23,17 @@ class Rays {
     }
 
     getDistances() {
-        let shortestDistance = Infinity;
+        let distances = [];
         for(let i = 0; i < this.rays.length; i++) {
             let newDistance = this.rays[i].getDistance();
-            if(newDistance < shortestDistance) {
-                shortestDistance = newDistance;
-            }
+            distances.push(newDistance);
         }
-        return shortestDistance;
+        return distances;
+    }
+
+    getShortestDistance() {
+        let distances = this.getDistances();
+        return Math.min(...distances);
     }
 
     drawIntersections() {

@@ -19,7 +19,7 @@ function setup() {
 function draw() {
     background(220);
     walls.draw();
-    cars.draw();
+    cars.update();
     
     if(gameMode == "human") {
         if(keyIsDown(UP_ARROW)) {
