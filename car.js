@@ -6,7 +6,7 @@ class Cars {
 
     update() {
         for(let i = 0; i < this.cars.length; i++) {
-            this.cars[0].update();
+            this.cars[i].update();
         }
     }
 
@@ -58,6 +58,7 @@ class Car {
 
     update() {
         if(this.isCrashed || this.isCrashing()) {
+            console.log("p");
             this.isCrashed = true;
         }
         if(!this.isCrashed) {
@@ -104,12 +105,4 @@ class Car {
         }
         return false;
     }
-}
-
-function createCars(x, y, amount) {
-    cars = [];
-    for(let i = 0; i < amount; i++) {
-        cars.push(new Car(x, y, -HALF_PI));
-    }
-    return cars;
 }

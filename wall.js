@@ -69,7 +69,7 @@ class Walls {
         let allCoords = [];
         for(let i = 0; i < this.walls.length; i++) {
             let coords = this.walls[i].getCoords();
-            allCoords.push(coords);
+            allCoords.push(coords[0].x, coords[0].y, coords[0].x, coords[0].y);
         }
         let data = new Blob([JSON.stringify(allCoords)], {type: 'text/plain'});
         return window.URL.createObjectURL(data);
@@ -88,24 +88,8 @@ class Wall {
     }
 
     getCoords() {
-        return [this.from.x, this.from.y, this.to.x, this.to.y];
+        return [this.from, this.to];
     }
 }
-
-// function createWalls() {
-//     let walls = [];
-//     let coords =   [[100, 100, 600, 100], 
-//                     [600, 100, 600, 500], 
-//                     [600, 500, 100, 500], 
-//                     [100, 500, 100, 100]];
-    
-//     for(let i = 0; i < coords.length; i++) {
-//         let from = createVector(coords[i][0], coords[i][1]);
-//         let to   = createVector(coords[i][2], coords[i][3]);
-//         walls.push(new Wall(from, to));
-//     }
-//     return walls;
-
-// }
 
 
