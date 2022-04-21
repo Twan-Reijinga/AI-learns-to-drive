@@ -5,21 +5,21 @@ class Cars {
     }
 
     update() {
-        for(let i = 0; i < this.cars.length; i++) {
+        for (let i = 0; i < this.cars.length; i++) {
             this.cars[i].update();
         }
     }
 
     addCars(x, y, amount) {
-        for(let i = 0; i < amount; i++) {
-            this.cars.push(new Car(x, y, -1/2*PI));
+        for (let i = 0; i < amount; i++) {
+            this.cars.push(new Car(x, y, (-1 / 2) * PI));
         }
     }
 
     rotateAll(rotation) {
-        for(let i = 0; i < this.cars.length; i++) {
+        for (let i = 0; i < this.cars.length; i++) {
             this.rotate(i, rotation);
-        } 
+        }
     }
 
     rotate(carNum, rotation) {
@@ -27,9 +27,9 @@ class Cars {
     }
 
     moveAll(direction) {
-        for(let i = 0; i < this.cars.length; i++) {
+        for (let i = 0; i < this.cars.length; i++) {
             this.move(i, direction);
-        } 
+        }
     }
 
     move(carNum, direction) {
@@ -43,25 +43,25 @@ class Car {
         this.y = y;
         // this.v = createVector(0, 0); // ! importaint
         this.a = createVector(0, 0); // !  cheak?
-        
+
         this.angle = 0;
         this.width = 100;
         this.height = 120;
         this.speed = 0.2;
         this.resistance = 1.04;
 
-        this.img = loadImage('assets/car2.0.png');
+        this.img = loadImage("assets/car2.0.png");
         this.rays = new Rays(x, y, 7);
         this.rotate(angle);
         this.isCrashed = false;
     }
 
     update() {
-        if(this.isCrashed || this.isCrashing()) {
+        if (this.isCrashed || this.isCrashing()) {
             console.log("p");
             this.isCrashed = true;
         }
-        if(!this.isCrashed) {
+        if (!this.isCrashed) {
             this.x += this.a.x;
             this.y += this.a.y;
             this.a.x /= this.resistance;
@@ -100,7 +100,7 @@ class Car {
     isCrashing() {
         const crashDistance = 15;
         let distance = this.rays.getShortestDistance();
-        if(distance < crashDistance) {
+        if (distance < crashDistance) {
             return true;
         }
         return false;

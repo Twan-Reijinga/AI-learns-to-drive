@@ -68,12 +68,11 @@ function mouseClicked() {
     }
 }
 
-let donwloadLink = document.getElementById("download");
-donwloadLink.addEventListener("click", function() {
+document.getElementById("download").addEventListener("click", () => {
     donwloadLink.href = walls.export();
 });
 
-document.getElementById("input").onchange = () => {
+document.getElementById("upload").onchange = () => {
     let input = event.target;
     let reader = new FileReader();
     reader.onload = function() {

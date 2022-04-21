@@ -5,26 +5,30 @@ class Rays {
     }
 
     rotate(rotation) {
-        for(let i = 0; i < this.rays.length; i++) {
+        for (let i = 0; i < this.rays.length; i++) {
             this.rays[i].rotate(rotation);
         }
     }
 
     changeLocation(x, y) {
-        for(let i = 0; i < this.rays.length; i++) {
+        for (let i = 0; i < this.rays.length; i++) {
             this.rays[i].changeLocation(x, y);
         }
     }
 
     addRays(x, y, amount) {
-        for(let angle = HALF_PI; angle <= HALF_PI + PI; angle += PI/(amount-1)) {
+        for (
+            let angle = HALF_PI;
+            angle <= HALF_PI + PI;
+            angle += PI / (amount - 1)
+        ) {
             this.rays.push(new Ray(x, y, angle));
         }
     }
 
     getDistances() {
         let distances = [];
-        for(let i = 0; i < this.rays.length; i++) {
+        for (let i = 0; i < this.rays.length; i++) {
             let newDistance = this.rays[i].getDistance();
             distances.push(newDistance);
         }
@@ -37,7 +41,7 @@ class Rays {
     }
 
     drawIntersections() {
-        for(let i = 0; i < this.rays.length; i++) {
+        for (let i = 0; i < this.rays.length; i++) {
             this.rays[i].drawIntersection();
         }
     }
@@ -63,15 +67,17 @@ class Ray {
     getIntersection(wall) {
         const dXWall = wall[0].x - wall[1].x;
         const dYWall = wall[0].y - wall[1].y;
-        const dXRay = -this.direction.x;       
-        const dYRay = -this.direction.y;       
-        
+        const dXRay = -this.direction.x;
+        const dYRay = -this.direction.y;
+
         const d = dXWall * dYRay - dYWall * dXRay;
-        if(d == 0) {
+        if (d == 0) {
             return false;
         }
-        const t = ((wall[0].x - this.x) * dYRay  - (wall[0].y - this.y) * dXRay ) / d;
-        const u = ((wall[0].x - this.x) * dYWall - (wall[0].y - this.y) * dXWall) / d;
+        const t =
+            ((wall[0].x - this.x) * dYRay - (wall[0].y - this.y) * dXRay) / d;
+        const u =
+            ((wall[0].x - this.x) * dYWall - (wall[0].y - this.y) * dXWall) / d;
 
         if (t > 0 && t < 1 && u > 0) {
             this.intersection = createVector();
@@ -85,13 +91,13 @@ class Ray {
     getDistance() {
         let shortestDistance = Infinity;
         let wallCoords = walls.getCoords();
-        for(let i = 0; i < wallCoords.length; i++) {
+        for (let i = 0; i < wallCoords.length; i++) {
             let intersection = this.getIntersection(wallCoords[i]);
-            if(intersection) {
+            if (intersection) {
                 const dX = this.x - intersection.x;
-                const dY = this.y - intersection.y; 
+                const dY = this.y - intersection.y;
                 let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
-                if(newDistance < shortestDistance) {
+                if (newDistance < shortestDistance) {
                     shortestDistance = newDistance;
                 }
             }

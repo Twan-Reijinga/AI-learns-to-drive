@@ -6,21 +6,21 @@ class Cheakpoints {
     }
 
     draw() {
-        for(let i = 0; i < this.cheakpoints.length; i++) {
+        for (let i = 0; i < this.cheakpoints.length; i++) {
             this.cheakpoints[i].draw();
         }
-        if(gameMode == "cheakpoint") {
+        if (gameMode == "cheakpoint") {
             stroke(0, 0, 255); // Blue //
             ellipse(mouseX, mouseY, 5, 5);
-            if(this.previous && keyIsDown(16) || !this.isFirst) {
+            if ((this.previous && keyIsDown(16)) || !this.isFirst) {
                 line(this.previous.x, this.previous.y, mouseX, mouseY);
-            } 
+            }
         }
     }
 
     addCoord(x, y) {
         let newCoord = createVector(x, y);
-        if(this.previous && keyIsDown(16) || !this.isFirst) {
+        if ((this.previous && keyIsDown(16)) || !this.isFirst) {
             this.cheakpoints.push(new Walls(this.previous, newCoord));
             this.isFirst = true;
         } else {
