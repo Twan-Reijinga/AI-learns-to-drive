@@ -1,16 +1,16 @@
 class Cheakpoints {
     constructor() {
         this.previous = null;
-        this.isFirst = false;
+        this.isFirst = true;
         this.cheakpoints = [];
     }
 
     draw() {
+        stroke(200, 100, 250);
         for (let i = 0; i < this.cheakpoints.length; i++) {
             this.cheakpoints[i].draw();
         }
         if (gameMode == "cheakpoint") {
-            stroke(0, 0, 255); // Blue //
             ellipse(mouseX, mouseY, 5, 5);
             if ((this.previous && keyIsDown(16)) || !this.isFirst) {
                 line(this.previous.x, this.previous.y, mouseX, mouseY);
@@ -21,7 +21,9 @@ class Cheakpoints {
     addCoord(x, y) {
         let newCoord = createVector(x, y);
         if ((this.previous && keyIsDown(16)) || !this.isFirst) {
-            this.cheakpoints.push(new Walls(this.previous, newCoord));
+            this.cheakpoints.push(new Wall(this.previous, newCoord));
+            console.log(this.cheakpoints);
+
             this.isFirst = true;
         } else {
             this.isFirst = false;
@@ -29,17 +31,17 @@ class Cheakpoints {
         this.previous = newCoord;
     }
 
-    // getCoords() {
-    //     let coords = [];
-    //     for(let i = 0; i < this.walls.length; i++) {
-    //         let coord = this.walls[i].getCoords();
-    //         coords.push(coord);
-    //     }
-    //     return coords;
-    // }
+    getCoords() {
+        let coords = [];
+        for (let i = 0; i < this.cheakpoints.length; i++) {
+            let coord = this.cheakpoints[i].getCoords();
+            coords.push(coord);
+        }
+        return coords;
+    }
 }
 
-// class Cheakpoints {
+// class Cheakpoint {
 //     constructor(from, to) {
 //         this.from = from;
 //         this.to = to;

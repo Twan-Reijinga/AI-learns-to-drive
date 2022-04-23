@@ -21,6 +21,7 @@ function setup() {
 function draw() {
     background(220);
     walls.draw();
+    cheakpoints.draw();
     cars.update();
 
     if (gameMode == "human") {
@@ -64,15 +65,19 @@ function draw() {
 function mouseClicked() {
     if (gameMode == "build") {
         walls.addCoord(Math.round(mouseX), Math.round(mouseY));
-    } else if (gameMode == "cheackpoint") {
+    } else if (gameMode == "cheakpoint") {
+        console.log("ping");
+        cheakpoints.addCoord(Math.round(mouseX), Math.round(mouseY));
     }
 }
 
-document.getElementById("download").addEventListener("click", () => {
+let donwloadLink = document.getElementById("download");
+donwloadLink.addEventListener("click", function() {
     donwloadLink.href = walls.export();
 });
 
-document.getElementById("upload").onchange = () => {
+let uploadBox = document.getElementById("upload");
+uploadBox.onchange = () => {
     let input = event.target;
     let reader = new FileReader();
     reader.onload = function() {

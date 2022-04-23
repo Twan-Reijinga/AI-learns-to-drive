@@ -25,11 +25,11 @@ class Walls {
     }
 
     draw() {
+        stroke(0);
         for (let i = 0; i < this.walls.length; i++) {
             this.walls[i].draw();
         }
         if (gameMode == "build") {
-            stroke(0);
             ellipse(mouseX, mouseY, 5, 5);
             if ((this.previous && keyIsDown(16)) || !this.isFirst) {
                 line(this.previous.x, this.previous.y, mouseX, mouseY);
@@ -91,7 +91,6 @@ class Wall {
     }
 
     draw() {
-        stroke(0);
         line(this.from.x, this.from.y, this.to.x, this.to.y);
     }
 
