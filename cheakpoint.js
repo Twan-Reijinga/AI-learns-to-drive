@@ -39,16 +39,16 @@ class Cheakpoints {
         }
         return coords;
     }
+
+    export() {
+        let allCoords = [];
+        for (let i = 0; i < this.cheakpoints.length; i++) {
+            let coords = this.cheakpoints[i].getCoords();
+            allCoords.push({
+                from: { x: coords[0].x, y: coords[0].y },
+                to: { x: coords[1].x, y: coords[1].y }
+            });
+        }
+        return allCoords;
+    }
 }
-
-// class Cheakpoint {
-//     constructor(from, to) {
-//         this.from = from;
-//         this.to = to;
-//     }
-
-//     draw() {
-//         stroke(0);
-//         line(this.from.x, this.from.y, this.to.x, this.to.y);
-//     }
-// }

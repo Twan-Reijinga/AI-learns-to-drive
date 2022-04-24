@@ -62,6 +62,19 @@ function draw() {
     }
 }
 
+function exportToFile() {
+    donwloadLink.download = prompt("save file as: ") + ".json";
+    let wallCoords = walls.export();
+    let cheakpointCoords = cheakpoints.export();
+    let data = new Blob(
+        [JSON.stringify({ cheakpoints: cheakpointCoords, walls: wallCoords })],
+        {
+            type: "text/plain"
+        }
+    );
+    return window.URL.createObjectURL(data);
+}
+
 function mouseClicked() {
     if (gameMode == "build") {
         walls.addCoord(Math.round(mouseX), Math.round(mouseY));
@@ -73,7 +86,7 @@ function mouseClicked() {
 
 let donwloadLink = document.getElementById("download");
 donwloadLink.addEventListener("click", function() {
-    donwloadLink.href = walls.export();
+    donwloadLink.href = exportToFile();
 });
 
 let uploadBox = document.getElementById("upload");

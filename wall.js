@@ -68,7 +68,6 @@ class Walls {
     }
 
     export() {
-        donwloadLink.download = prompt("save file as: ") + ".json";
         let allCoords = [];
         for (let i = 0; i < this.walls.length; i++) {
             let coords = this.walls[i].getCoords();
@@ -77,10 +76,7 @@ class Walls {
                 to: { x: coords[1].x, y: coords[1].y }
             });
         }
-        let data = new Blob([JSON.stringify(allCoords)], {
-            type: "text/plain"
-        });
-        return window.URL.createObjectURL(data);
+        return allCoords;
     }
 }
 
