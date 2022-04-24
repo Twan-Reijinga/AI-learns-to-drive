@@ -58,7 +58,6 @@ class Car {
 
     update() {
         if (this.isCrashed || this.isCrashing()) {
-            console.log("p");
             this.isCrashed = true;
         }
         if (!this.isCrashed) {

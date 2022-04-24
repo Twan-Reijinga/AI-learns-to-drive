@@ -1,9 +1,9 @@
 class Walls {
-    constructor() {
+    constructor(type) {
+        this.type = type;
+        this.walls = [];
         this.previous = null;
         this.isFirst = true;
-        this.walls = [];
-        this.addSideWalls(800, 600);
     }
 
     addSideWalls(w, h) {
@@ -24,12 +24,12 @@ class Walls {
         }
     }
 
-    draw() {
-        stroke(0);
+    draw(color) {
+        stroke(color);
         for (let i = 0; i < this.walls.length; i++) {
             this.walls[i].draw();
         }
-        if (gameMode == "build") {
+        if (gameMode == this.type + "Build") {
             ellipse(mouseX, mouseY, 5, 5);
             if ((this.previous && keyIsDown(16)) || !this.isFirst) {
                 line(this.previous.x, this.previous.y, mouseX, mouseY);
@@ -57,12 +57,10 @@ class Walls {
         return coords;
     }
 
-    import(txt) {
-        this.walls = [];
-        let walls = JSON.parse(txt);
-        for (let i = 0; i < walls.length; i++) {
-            let from = createVector(walls[i].from.x, walls[i].from.y);
-            let to = createVector(walls[i].to.x, walls[i].to.y);
+    import(coords) {
+        for (let i = 0; i < coords.length; i++) {
+            let from = createVector(coords[i].from.x, coords[i].from.y);
+            let to = createVector(coords[i].to.x, coords[i].to.y);
             this.walls.push(new Wall(from, to));
         }
     }

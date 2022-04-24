@@ -2,7 +2,6 @@ let cars;
 let walls;
 let cheakpoints;
 let gameMode;
-// let network;
 
 function setup() {
     const width = 800;
@@ -11,17 +10,17 @@ function setup() {
     createCanvas(width, height);
     frameRate(60);
 
-    walls = new Walls();
-    cheakpoints = new Cheakpoints();
+    walls = new Walls("wall");
+    cheakpoints = new Walls("cheakpoint");
     cars = new Cars(200, 200, 1);
-    gameMode = "build";
-    // network = new Network();
+    gameMode = "wallBuild";
+    walls.addSideWalls(width, height);
 }
 
 function draw() {
     background(220);
-    walls.draw();
-    cheakpoints.draw();
+    walls.draw(color(0));
+    cheakpoints.draw(color(200, 100, 250));
     cars.update();
 
     if (gameMode == "human") {
@@ -45,21 +44,23 @@ function draw() {
 
     // - gameMode switch - //
     if (keyIsDown(49)) {
-        // 1 //
-        gameMode = "build";
+        gameMode = "wallBuild";
     }
     if (keyIsDown(50)) {
-        // 2 //
         gameMode = "human";
     }
     if (keyIsDown(51)) {
-        // 3 //
         gameMode = "selfDriving";
     }
     if (keyIsDown(52)) {
-        // 4 //
-        gameMode = "cheakpoint";
+        gameMode = "cheakpointBuild";
     }
+}
+
+function importFromFile(txt) {
+    let coords = JSON.parse(txt);
+    walls.import(coords.walls);
+    cheakpoints.import(coords.cheakpoints);
 }
 
 function exportToFile() {
@@ -67,7 +68,7 @@ function exportToFile() {
     let wallCoords = walls.export();
     let cheakpointCoords = cheakpoints.export();
     let data = new Blob(
-        [JSON.stringify({ cheakpoints: cheakpointCoords, walls: wallCoords })],
+        [JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords })],
         {
             type: "text/plain"
         }
@@ -76,10 +77,9 @@ function exportToFile() {
 }
 
 function mouseClicked() {
-    if (gameMode == "build") {
+    if (gameMode == "wallBuild") {
         walls.addCoord(Math.round(mouseX), Math.round(mouseY));
-    } else if (gameMode == "cheakpoint") {
-        console.log("ping");
+    } else if (gameMode == "cheakpointBuild") {
         cheakpoints.addCoord(Math.round(mouseX), Math.round(mouseY));
     }
 }
@@ -94,7 +94,7 @@ uploadBox.onchange = () => {
     let input = event.target;
     let reader = new FileReader();
     reader.onload = function() {
-        walls.import(reader.result);
+        importFromFile(reader.result);
     };
     reader.readAsText(input.files[0]);
 };
