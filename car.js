@@ -41,8 +41,7 @@ class Car {
     constructor(x, y, angle) {
         this.x = x;
         this.y = y;
-        // this.v = createVector(0, 0); // ! importaint
-        this.a = createVector(0, 0); // !  cheak?
+        this.v = createVector(0, 0); // !  cheak?
 
         this.angle = 0;
         this.width = 100;
@@ -60,11 +59,14 @@ class Car {
         if (this.isCrashed || this.isCrashing()) {
             this.isCrashed = true;
         }
+        if (this.isToutchingCheakpoint()) {
+            console.log("test");
+        }
         if (!this.isCrashed) {
-            this.x += this.a.x;
-            this.y += this.a.y;
-            this.a.x /= this.resistance;
-            this.a.y /= this.resistance;
+            this.x += this.v.x;
+            this.y += this.v.y;
+            this.v.x /= this.resistance;
+            this.v.y /= this.resistance;
 
             this.rays.changeLocation(this.x, this.y);
             this.draw();
@@ -72,7 +74,7 @@ class Car {
     }
 
     draw() {
-        this.rays.drawIntersections();
+        this.rays.drawWallIntersections();
         push();
         translate(this.x, this.y);
         rotate(this.angle + HALF_PI);
@@ -87,19 +89,28 @@ class Car {
     }
 
     move(direction) {
-        let aX = cos(this.angle) * this.speed * direction;
-        let aY = sin(this.angle) * this.speed * direction;
-        this.a.add(aX, aY);
+        let vX = cos(this.angle) * this.speed * direction;
+        let vY = sin(this.angle) * this.speed * direction;
+        this.v.add(vX, vY);
     }
 
-    getDistances() {
-        return this.rays.getDistances();
+    getDistances(objects) {
+        return this.rays.getDistances(objects);
     }
 
     isCrashing() {
         const crashDistance = 15;
-        let distance = this.rays.getShortestDistance();
+        let distance = this.rays.getShortestDistance(walls);
         if (distance < crashDistance) {
+            return true;
+        }
+        return false;
+    }
+
+    isToutchingCheakpoint() {
+        const toutchDistance = 15;
+        let distance = this.rays.getShortestDistance(cheakpoints);
+        if (distance < toutchDistance) {
             return true;
         }
         return false;

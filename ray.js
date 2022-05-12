@@ -26,23 +26,23 @@ class Rays {
         }
     }
 
-    getDistances() {
+    getDistances(objects) {
         let distances = [];
         for (let i = 0; i < this.rays.length; i++) {
-            let newDistance = this.rays[i].getDistance();
+            let newDistance = this.rays[i].getDistance(objects);
             distances.push(newDistance);
         }
         return distances;
     }
 
-    getShortestDistance() {
-        let distances = this.getDistances();
+    getShortestDistance(objects) {
+        let distances = this.getDistances(objects);
         return Math.min(...distances);
     }
 
-    drawIntersections() {
+    drawWallIntersections() {
         for (let i = 0; i < this.rays.length; i++) {
-            this.rays[i].drawIntersection();
+            this.rays[i].drawWallIntersection();
         }
     }
 }
@@ -88,9 +88,9 @@ class Ray {
         return false;
     }
 
-    getDistance() {
+    getDistance(objects) {
         let shortestDistance = Infinity;
-        let wallCoords = walls.getCoords();
+        let wallCoords = objects.getCoords();
         for (let i = 0; i < wallCoords.length; i++) {
             let intersection = this.getIntersection(wallCoords[i]);
             if (intersection) {
@@ -105,8 +105,8 @@ class Ray {
         return shortestDistance;
     }
 
-    drawIntersection() {
-        let distance = this.getDistance();
+    drawWallIntersection() {
+        let distance = this.getDistance(walls);
         stroke(0, 255, 0);
         let intersectionX = this.direction.x * distance;
         let intersectionY = this.direction.y * distance;
