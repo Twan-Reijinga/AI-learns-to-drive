@@ -40,6 +40,17 @@ class Rays {
         return Math.min(...distances);
     }
 
+    getDistanceToObject(object) {
+        let shortestDistance = Infinity;
+        for (let i = 0; i < this.rays.length; i++) {
+            let newDistance = this.rays[i].getDistanceToObject(object);
+            if (newDistance < shortestDistance) {
+                shortestDistance = newDistance;
+            }
+        }
+        return shortestDistance;
+    }
+
     drawWallIntersections() {
         for (let i = 0; i < this.rays.length; i++) {
             this.rays[i].drawWallIntersection();
@@ -90,19 +101,24 @@ class Ray {
 
     getDistance(objects) {
         let shortestDistance = Infinity;
-        let wallCoords = objects.getCoords();
-        for (let i = 0; i < wallCoords.length; i++) {
-            let intersection = this.getIntersection(wallCoords[i]);
-            if (intersection) {
-                const dX = this.x - intersection.x;
-                const dY = this.y - intersection.y;
-                let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
-                if (newDistance < shortestDistance) {
-                    shortestDistance = newDistance;
-                }
+        for (let i = 0; i < objects.walls.length; i++) {
+            let newDistance = this.getDistanceToObject(objects.walls[i]);
+            if (newDistance < shortestDistance) {
+                shortestDistance = newDistance;
             }
         }
         return shortestDistance;
+    }
+
+    getDistanceToObject(object) {
+        let intersection = this.getIntersection(object.getCoords());
+        if (intersection) {
+            const dX = this.x - intersection.x;
+            const dY = this.y - intersection.y;
+            let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
+            return newDistance;
+        }
+        return Infinity;
     }
 
     drawWallIntersection() {

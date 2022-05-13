@@ -53,14 +53,19 @@ class Car {
         this.rays = new Rays(x, y, 7);
         this.rotate(angle);
         this.isCrashed = false;
+        this.score = 0;
     }
 
     update() {
+        if (this.score == cheakpoints.walls.length) {
+            return;
+        }
         if (this.isCrashed || this.isCrashing()) {
             this.isCrashed = true;
         }
         if (this.isToutchingCheakpoint()) {
-            console.log("test");
+            this.score++;
+            console.log(this.score);
         }
         if (!this.isCrashed) {
             this.x += this.v.x;
@@ -108,8 +113,10 @@ class Car {
     }
 
     isToutchingCheakpoint() {
+        if (!cheakpoints.walls.length) return;
         const toutchDistance = 15;
-        let distance = this.rays.getShortestDistance(cheakpoints);
+        let currentCheakpoint = cheakpoints.walls[this.score];
+        let distance = this.rays.getDistanceToObject(currentCheakpoint);
         if (distance < toutchDistance) {
             return true;
         }

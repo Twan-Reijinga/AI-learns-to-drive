@@ -48,15 +48,6 @@ class Walls {
         this.previous = newCoord;
     }
 
-    getCoords() {
-        let coords = [];
-        for (let i = 0; i < this.walls.length; i++) {
-            let coord = this.walls[i].getCoords();
-            coords.push(coord);
-        }
-        return coords;
-    }
-
     import(coords) {
         for (let i = 0; i < coords.length; i++) {
             let from = createVector(coords[i].from.x, coords[i].from.y);
