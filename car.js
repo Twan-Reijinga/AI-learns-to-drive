@@ -1,18 +1,18 @@
 class Cars {
-    constructor(x, y, amount) {
+    constructor(x, y, amount, rayCount) {
         this.cars = [];
-        this.addCars(x, y, amount);
+        this.addCars(x, y, amount, rayCount);
+    }
+
+    addCars(x, y, amount, rayCount) {
+        for (let i = 0; i < amount; i++) {
+            this.cars.push(new Car(x, y, (-1 / 2) * PI, rayCount));
+        }
     }
 
     update() {
         for (let i = 0; i < this.cars.length; i++) {
             this.cars[i].update();
-        }
-    }
-
-    addCars(x, y, amount) {
-        for (let i = 0; i < amount; i++) {
-            this.cars.push(new Car(x, y, (-1 / 2) * PI));
         }
     }
 
@@ -38,7 +38,7 @@ class Cars {
 }
 
 class Car {
-    constructor(x, y, angle) {
+    constructor(x, y, angle, rayCount) {
         this.x = x;
         this.y = y;
         this.v = createVector(0, 0); // !  cheak?
@@ -50,14 +50,17 @@ class Car {
         this.resistance = 1.04;
 
         this.img = loadImage("assets/car2.0.png");
-        this.rays = new Rays(x, y, 7);
+        this.rays = new Rays(x, y, rayCount);
         this.rotate(angle);
         this.isCrashed = false;
         this.score = 0;
     }
 
     update() {
-        if (this.score == cheakpoints.walls.length) {
+        if (
+            cheakpoints.walls.length &&
+            this.score == cheakpoints.walls.length
+        ) {
             return;
         }
         if (this.isCrashed || this.isCrashing()) {
@@ -65,7 +68,6 @@ class Car {
         }
         if (this.isToutchingCheakpoint()) {
             this.score++;
-            console.log(this.score);
         }
         if (!this.isCrashed) {
             this.x += this.v.x;

@@ -12,9 +12,10 @@ function setup() {
 
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
-    cars = new Cars(200, 200, 1);
+    cars = new Cars(100, 200, 1, 7);
     gameMode = "human";
     walls.addSideWalls(width, height);
+    let network = new Network([7, 6, 4]); // ! tijdelijk
 }
 
 function draw() {
