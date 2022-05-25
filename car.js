@@ -1,47 +1,8 @@
-class Cars {
-    constructor(x, y, amount, rayCount) {
-        this.cars = [];
-        this.addCars(x, y, amount, rayCount);
-    }
-
-    addCars(x, y, amount, rayCount) {
-        for (let i = 0; i < amount; i++) {
-            this.cars.push(new Car(x, y, (-1 / 2) * PI, rayCount));
-        }
-    }
-
-    update() {
-        for (let i = 0; i < this.cars.length; i++) {
-            this.cars[i].update();
-        }
-    }
-
-    rotateAll(rotation) {
-        for (let i = 0; i < this.cars.length; i++) {
-            this.rotate(i, rotation);
-        }
-    }
-
-    rotate(carNum, rotation) {
-        this.cars[carNum].rotate(rotation);
-    }
-
-    moveAll(direction) {
-        for (let i = 0; i < this.cars.length; i++) {
-            this.move(i, direction);
-        }
-    }
-
-    move(carNum, direction) {
-        this.cars[carNum].move(direction);
-    }
-}
-
 class Car {
-    constructor(x, y, angle, rayCount) {
+    constructor(x, y, rayCount) {
         this.x = x;
         this.y = y;
-        this.v = createVector(0, 0); // !  cheak?
+        this.v = createVector(0, 0);
 
         this.angle = 0;
         this.width = 100;
@@ -51,12 +12,17 @@ class Car {
 
         this.img = loadImage("assets/car2.0.png");
         this.rays = new Rays(x, y, rayCount);
-        this.rotate(angle);
         this.isCrashed = false;
         this.score = 0;
+
+        this.network = new Network([rayCount, 6, 4]);
+        this.controls = new Controls();
+
+        this.rotate(-HALF_PI);
     }
 
     update() {
+        this.moveByControls();
         if (
             cheakpoints.walls.length &&
             this.score == cheakpoints.walls.length
@@ -76,7 +42,33 @@ class Car {
             this.v.y /= this.resistance;
 
             this.rays.changeLocation(this.x, this.y);
+            switch (gameMode) {
+                case "selfDriving":
+                    const distances = this.rays.getDistances(walls);
+                    this.prossesNetworkControls(distances);
+                    break;
+                case "human":
+                    this.controls.prossesHumanControls();
+                    break;
+            }
             this.draw();
+        }
+    }
+
+    prossesNetworkControls(distances) {
+        const outputs = this.network.getOutputs(distances);
+        this.controls.reset();
+        if (outputs[0]) {
+            this.controls.forward = true;
+        }
+        if (outputs[1]) {
+            this.controls.back = true;
+        }
+        if (outputs[2]) {
+            this.controls.left = true;
+        }
+        if (outputs[3]) {
+            this.controls.right = true;
         }
     }
 
@@ -88,6 +80,22 @@ class Car {
         imageMode(CENTER);
         image(this.img, 0, 0, this.width, this.height);
         pop();
+    }
+
+    moveByControls() {
+        if (this.controls.forward) {
+            this.move(1);
+        }
+        if (this.controls.back) {
+            this.move(-1);
+        }
+        if (this.controls.left) {
+            this.rotate(-0.01 * PI);
+        }
+        if (this.controls.right) {
+            this.rotate(0.01 * PI);
+        }
+        this.controls.reset();
     }
 
     rotate(rotation) {

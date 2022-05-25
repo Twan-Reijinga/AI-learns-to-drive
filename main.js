@@ -1,4 +1,4 @@
-let cars;
+let car;
 let walls;
 let cheakpoints;
 let gameMode;
@@ -12,46 +12,25 @@ function setup() {
 
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
-    cars = new Cars(100, 200, 1, 7);
+    car = new Car(100, 200, 7);
     gameMode = "human";
     walls.addSideWalls(width, height);
-    let network = new Network([7, 6, 4]); // ! tijdelijk
 }
 
 function draw() {
     background(220);
     walls.draw(color(0));
     cheakpoints.draw(color(200, 100, 250));
-    cars.update();
+    car.update();
 
-    if (gameMode == "human") {
-        if (keyIsDown(UP_ARROW)) {
-            cars.moveAll(1);
-        }
-        if (keyIsDown(LEFT_ARROW)) {
-            cars.rotateAll(-0.01 * PI);
-        }
-        if (keyIsDown(DOWN_ARROW)) {
-            cars.moveAll(-1);
-        }
-        if (keyIsDown(RIGHT_ARROW)) {
-            cars.rotateAll(0.01 * PI);
-        }
-    }
-    if (gameMode == "selfDriving") {
-        cars.moveAll(4);
-        cars.rotateAll(0.01 * PI);
-    }
-
-    // - gameMode switch - //
     if (keyIsDown(49)) {
-        gameMode = "wallBuild";
-    }
-    if (keyIsDown(50)) {
         gameMode = "human";
     }
-    if (keyIsDown(51)) {
+    if (keyIsDown(50)) {
         gameMode = "selfDriving";
+    }
+    if (keyIsDown(51)) {
+        gameMode = "wallBuild";
     }
     if (keyIsDown(52)) {
         gameMode = "cheakpointBuild";

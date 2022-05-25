@@ -9,7 +9,7 @@ class Network {
 
     getOutputs(inputs) {
         let outputs = this.layers[0].getOutputs(inputs);
-        for (let i = 1; i < inputs.length; i++) {
+        for (let i = 1; i < this.layers.length; i++) {
             outputs = this.layers[i].getOutputs(inputs);
         }
         return outputs;
@@ -27,7 +27,6 @@ class Layer {
     }
 
     randomize() {
-        console.log("input", this.inputCount, "outputs", this.outputCount);
         for (let i = 0; i < this.outputCount; i++) {
             this.biases[i] = Math.random() * 2 - 1;
         }
@@ -37,11 +36,6 @@ class Layer {
                 this.weights[i].push(Math.random() * 2 - 1);
             }
         }
-
-        console.log("biases   ");
-        console.log(this.biases);
-        console.log("weights   ");
-        console.log(this.weights);
     }
 
     getOutputs(inputs) {
@@ -52,9 +46,9 @@ class Layer {
                 sum += inputs[j] * this.weights[j][i];
             }
             if (sum > this.biases[i]) {
-                this.outputs[i] = 1;
+                outputs[i] = 1;
             } else {
-                this.outputs[i] = 0;
+                outputs[i] = 0;
             }
         }
         return outputs;
