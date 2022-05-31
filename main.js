@@ -1,4 +1,4 @@
-let car;
+let cars = [];
 let walls;
 let cheakpoints;
 let gameMode;
@@ -8,12 +8,13 @@ function setup() {
     const height = 600;
 
     createCanvas(width, height);
-    frameRate(60);
+    frameRate(30);
 
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
-    car = new Car(100, 200, 7);
     gameMode = "human";
+    cars = createCars(10);
+
     walls.addSideWalls(width, height);
 }
 
@@ -21,7 +22,13 @@ function draw() {
     background(220);
     walls.draw(color(0));
     cheakpoints.draw(color(200, 100, 250));
-    car.update();
+    for (let i = 0; i < cars.length; i++) {
+        cars[i].update();
+        cars[i].draw(color(255, 0, 0, 50), 0);
+    }
+
+    const bestCar = findBestCar();
+    bestCar.draw(color(255, 0, 0), 1);
 
     if (keyIsDown(49)) {
         gameMode = "human";
@@ -38,16 +45,16 @@ function draw() {
 }
 
 function importFromFile(txt) {
-    let coords = JSON.parse(txt);
+    const coords = JSON.parse(txt);
     walls.import(coords.walls);
     cheakpoints.import(coords.cheakpoints);
 }
 
 function exportToFile() {
     donwloadLink.download = prompt("save file as: ") + ".json";
-    let wallCoords = walls.export();
-    let cheakpointCoords = cheakpoints.export();
-    let data = new Blob(
+    const wallCoords = walls.export();
+    const cheakpointCoords = cheakpoints.export();
+    const data = new Blob(
         [JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords })],
         {
             type: "text/plain"
@@ -64,12 +71,12 @@ function mouseClicked() {
     }
 }
 
-let donwloadLink = document.getElementById("download");
+const donwloadLink = document.getElementById("download");
 donwloadLink.addEventListener("click", function() {
     donwloadLink.href = exportToFile();
 });
 
-let uploadBox = document.getElementById("upload");
+const uploadBox = document.getElementById("upload");
 uploadBox.onchange = () => {
     let input = event.target;
     let reader = new FileReader();

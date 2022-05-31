@@ -1,3 +1,19 @@
+function createCars(amount) {
+    cars = [];
+    for (let i = 0; i < amount; i++) {
+        cars.push(new Car(100, 200, 7));
+    }
+    return cars;
+}
+
+function findBestCar() {
+    const bestCar = cars.find(
+        c => c.score == Math.max(...cars.map(c => c.score))
+    );
+    console.log(cars[0] == bestCar);
+    return bestCar;
+}
+
 class Car {
     constructor(x, y, rayCount) {
         this.x = x;
@@ -5,8 +21,8 @@ class Car {
         this.v = createVector(0, 0);
 
         this.angle = 0;
-        this.width = 100;
-        this.height = 120;
+        this.width = 50;
+        this.height = 90;
         this.speed = 0.2;
         this.resistance = 1.04;
 
@@ -51,7 +67,6 @@ class Car {
                     this.controls.prossesHumanControls();
                     break;
             }
-            this.draw();
         }
     }
 
@@ -72,13 +87,16 @@ class Car {
         }
     }
 
-    draw() {
-        this.rays.drawWallIntersections();
+    draw(color, isRayVisible) {
+        if (isRayVisible) {
+            this.rays.drawWallIntersections();
+        }
         push();
         translate(this.x, this.y);
         rotate(this.angle + HALF_PI);
-        imageMode(CENTER);
-        image(this.img, 0, 0, this.width, this.height);
+        fill(color);
+        noStroke();
+        rect(-0.5 * this.width, -0.4 * this.height, this.width, this.height);
         pop();
     }
 

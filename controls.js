@@ -13,16 +13,16 @@ class Controls {
     }
     prossesHumanControls() {
         if (keyIsDown(UP_ARROW)) {
-            car.move(1);
+            this.forward = true;
         }
         if (keyIsDown(LEFT_ARROW)) {
-            car.rotate(-0.01 * PI);
+            this.left = true;
         }
         if (keyIsDown(DOWN_ARROW)) {
-            car.move(-1);
+            this.back = true;
         }
         if (keyIsDown(RIGHT_ARROW)) {
-            car.rotate(0.01 * PI);
+            this.right = true;
         }
     }
 }
