@@ -15,7 +15,7 @@ function findBestCar() {
 }
 
 class Car {
-    constructor(x, y, width, height, rayCount, controleType = "AI") {
+    constructor(x, y, width, height, rayCount, speed = 0.2, controleType = "AI") {
         this.x = x;
         this.y = y;
         this.v = createVector(0, 0);
@@ -23,15 +23,18 @@ class Car {
         this.angle = 0;
         this.width = width;
         this.height = height;
-        this.speed = 0.2;
+        this.speed = speed;
         this.resistance = 1.04;
 
         this.img = loadImage("assets/car2.0.png");
         this.rays = new Rays(x, y, rayCount);
         this.isCrashed = false;
         this.score = 0;
-
-        this.network = new Network([rayCount, 6, 4]);
+        this.controlType = controleType;
+        
+        if(controleType == "AI") {
+            this.network = new Network([rayCount, 6, 4]);
+        }
         this.controls = new Controls();
 
         this.rotate(-HALF_PI);
@@ -58,8 +61,8 @@ class Car {
             this.v.y /= this.resistance;
 
             this.rays.changeLocation(this.x, this.y);
-            switch (gameMode) {
-                case "selfDriving":
+            switch (this.controlType) {
+                case "AI":
                     const distances = this.rays.getDistances(walls);
                     this.prossesNetworkControls(distances);
                     break;
