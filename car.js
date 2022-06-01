@@ -1,7 +1,7 @@
 function createCars(amount) {
     cars = [];
     for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 200, 7));
+        cars.push(new Car(100, 200, 90, 50, 7));
     }
     return cars;
 }
@@ -15,14 +15,14 @@ function findBestCar() {
 }
 
 class Car {
-    constructor(x, y, rayCount) {
+    constructor(x, y, width, height, rayCount, controleType = "AI") {
         this.x = x;
         this.y = y;
         this.v = createVector(0, 0);
 
         this.angle = 0;
-        this.width = 50;
-        this.height = 90;
+        this.width = width;
+        this.height = height;
         this.speed = 0.2;
         this.resistance = 1.04;
 
