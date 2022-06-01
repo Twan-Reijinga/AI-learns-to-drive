@@ -10,7 +10,6 @@ function findBestCar() {
     const bestCar = cars.find(
         c => c.score == Math.max(...cars.map(c => c.score))
     );
-    console.log(cars[0] == bestCar);
     return bestCar;
 }
 

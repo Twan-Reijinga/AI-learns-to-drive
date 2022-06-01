@@ -5,12 +5,14 @@ class Controls {
         this.left = false;
         this.right = false;
     }
+
     reset() {
         this.forward = false;
         this.back = false;
         this.left = false;
         this.right = false;
     }
+
     prossesHumanControls() {
         if (keyIsDown(UP_ARROW)) {
             this.forward = true;
