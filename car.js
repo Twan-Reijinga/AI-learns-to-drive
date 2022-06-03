@@ -73,7 +73,7 @@ class Car {
     }
 
     prossesNetworkControls(distances) {
-        const outputs = this.network.getOutputs(distances);
+        const outputs = Network.getOutputs(this.network, distances);
         this.controls.reset();
         if (outputs[0]) {
             this.controls.forward = true;

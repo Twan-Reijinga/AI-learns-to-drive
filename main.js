@@ -22,7 +22,14 @@ function setup() {
     }
 
     if(localStorage.getItem("network")) {
+        console.log(localStorage.getItem("network"))
         cars[0].network = JSON.parse(localStorage.getItem("network"));
+        for (let i = 1; i < cars.length; i++) {
+            cars[i].network = JSON.parse(localStorage.getItem("network"));
+            if(i != 1) {
+                Network.mutate(cars[i].network, 0.2);
+            }
+        }
     }
 }
 
