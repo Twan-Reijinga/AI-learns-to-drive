@@ -1,7 +1,7 @@
 function createCars(amount) {
     cars = [];
     for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 200, 90, 50, 7));
+        cars.push(new Car(100, 200, 50, 90, 7));
     }
     return cars;
 }

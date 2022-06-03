@@ -16,6 +16,14 @@ function setup() {
     cars = createCars(10);
 
     walls.addSideWalls(width, height);
+
+    if(localStorage.getItem("map")) {
+        importMap(localStorage.getItem("map"))
+    }
+
+    if(localStorage.getItem("network")) {
+        cars[0].network = JSON.parse(localStorage.getItem("network"));
+    }
 }
 
 function draw() {
@@ -44,13 +52,13 @@ function draw() {
     }
 }
 
-function importFromFile(txt) {
+function importMap(txt) {
     const coords = JSON.parse(txt);
     walls.import(coords.walls);
     cheakpoints.import(coords.cheakpoints);
 }
 
-function exportToFile() {
+function exportMapToFile() {
     donwloadLink.download = prompt("save file as: ") + ".json";
     const wallCoords = walls.export();
     const cheakpointCoords = cheakpoints.export();
@@ -63,6 +71,26 @@ function exportToFile() {
     return window.URL.createObjectURL(data);
 }
 
+function saveMap() {
+    const wallCoords = walls.export();
+    const cheakpointCoords = cheakpoints.export();
+    localStorage.setItem("map", JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords }));
+}
+
+function removeMap() {
+    localStorage.removeItem("map");
+}
+
+function saveBestNetwork() {
+    const wallCoords = walls.export();
+    const cheakpointCoords = cheakpoints.export();
+    localStorage.setItem("network", JSON.stringify(findBestCar().network));
+}
+
+function removeBestNetwork() {
+    localStorage.removeItem("network");
+}
+
 function mouseClicked() {
     if (gameMode == "wallBuild") {
         walls.addCoord(Math.round(mouseX), Math.round(mouseY));
@@ -73,7 +101,7 @@ function mouseClicked() {
 
 const donwloadLink = document.getElementById("download");
 donwloadLink.addEventListener("click", function() {
-    donwloadLink.href = exportToFile();
+    donwloadLink.href = exportMapToFile();
 });
 
 const uploadBox = document.getElementById("upload");
@@ -81,7 +109,7 @@ uploadBox.onchange = () => {
     let input = event.target;
     let reader = new FileReader();
     reader.onload = function() {
-        importFromFile(reader.result);
+        importMap(reader.result);
     };
     reader.readAsText(input.files[0]);
 };
