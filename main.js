@@ -13,7 +13,7 @@ function setup() {
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
     gameMode = "human";
-    cars = createCars(10);
+    cars = createCars(100);
 
     walls.addSideWalls(width, height);
 
@@ -37,6 +37,22 @@ function draw() {
     background(220);
     walls.draw(color(0));
     cheakpoints.draw(color(200, 100, 250));
+    let carsAlive = false;
+    for (let i =0; i < cars.length; i++) {
+        if(!cars[i].isCrashed) {
+            i = cars.length;
+            carsAlive = true;
+        }
+    }
+    if(!carsAlive) {
+        for (let i = 1; i < cars.length; i++) {
+            cars[i].network = JSON.parse(findBestCar.network);
+            if(i != 1) {
+                Network.mutate(cars[i].network, 0.2);
+            }
+        }
+    }
+
     for (let i = 0; i < cars.length; i++) {
         cars[i].update();
         cars[i].draw(color(255, 0, 0, 50), 0);

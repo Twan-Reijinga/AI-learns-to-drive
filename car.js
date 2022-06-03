@@ -97,6 +97,9 @@ class Car {
         translate(this.x, this.y);
         rotate(this.angle + HALF_PI);
         fill(color);
+        if(this.isCrashed) {
+            fill(127, 40);
+        }
         noStroke();
         rect(-0.5 * this.width, -0.4 * this.height, this.width, this.height);
         pop();
