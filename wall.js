@@ -62,7 +62,7 @@ class Walls {
             let coords = this.walls[i].getCoords();
             allCoords.push({
                 from: { x: coords[0].x, y: coords[0].y },
-                to: { x: coords[1].x, y: coords[1].y }
+                to: { x: coords[1].x, y: coords[1].y },
             });
         }
         return allCoords;

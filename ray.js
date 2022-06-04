@@ -60,9 +60,9 @@ class Rays {
 
 class Ray {
     constructor(x, y, angle) {
-        this.changeLocation(x, y);
         this.angle = 0;
         this.rotate(angle);
+        this.changeLocation(x, y);
     }
 
     rotate(rotation) {
@@ -76,27 +76,12 @@ class Ray {
     }
 
     getIntersection(wall) {
-        const dXWall = wall[0].x - wall[1].x;
-        const dYWall = wall[0].y - wall[1].y;
-        const dXRay = -this.direction.x;
-        const dYRay = -this.direction.y;
-
-        const d = dXWall * dYRay - dYWall * dXRay;
-        if (d == 0) {
-            return false;
-        }
-        const t =
-            ((wall[0].x - this.x) * dYRay - (wall[0].y - this.y) * dXRay) / d;
-        const u =
-            ((wall[0].x - this.x) * dYWall - (wall[0].y - this.y) * dXWall) / d;
-
-        if (t > 0 && t < 1 && u > 0) {
-            this.intersection = createVector();
-            this.intersection.x = wall[0].x + t * -dXWall;
-            this.intersection.y = wall[0].y + t * -dYWall;
-            return this.intersection;
-        }
-        return false;
+        const loc = createVector(this.x, this.y);
+        const direction = createVector(
+            this.direction.x + this.x,
+            this.direction.y + this.y
+        );
+        return isLineLineIntersecting(loc, direction, wall[0], wall[1]);
     }
 
     getDistance(objects) {

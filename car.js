@@ -1,20 +1,28 @@
 function createCars(amount) {
     cars = [];
     for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 200, 50, 90, 7));
+        cars.push(new Car(100, 250, 40, 75, 7, 0.6, "human"));
     }
     return cars;
 }
 
 function findBestCar() {
     const bestCar = cars.find(
-        c => c.score == Math.max(...cars.map(c => c.score))
+        (c) => c.score == Math.max(...cars.map((c) => c.score))
     );
     return bestCar;
 }
 
 class Car {
-    constructor(x, y, width, height, rayCount, speed = 0.2, controleType = "AI") {
+    constructor(
+        x,
+        y,
+        width,
+        height,
+        rayCount,
+        speed = 0.2,
+        controleType = "AI"
+    ) {
         this.x = x;
         this.y = y;
         this.v = createVector(0, 0);
@@ -25,13 +33,14 @@ class Car {
         this.speed = speed;
         this.resistance = 1.04;
 
-        this.img = loadImage("assets/car2.0.png");
         this.rays = new Rays(x, y, rayCount);
         this.isCrashed = false;
+        this.cheakpointsReached = 0;
         this.score = 0;
+        this.timeSinceLastCheak = 0;
         this.controlType = controleType;
-        
-        if(controleType == "AI") {
+
+        if (controleType == "AI") {
             this.network = new Network([rayCount, 6, 4]);
         }
         this.controls = new Controls();
@@ -40,18 +49,24 @@ class Car {
     }
 
     update() {
+        this.timeSinceLastCheak++;
         this.moveByControls();
         if (
             cheakpoints.walls.length &&
-            this.score == cheakpoints.walls.length
+            this.cheakpointsReached == cheakpoints.walls.length
         ) {
+            // car won!
+            alert("Car reached finish!");
             return;
         }
         if (this.isCrashed || this.isCrashing()) {
             this.isCrashed = true;
+            return;
         }
         if (this.isToutchingCheakpoint()) {
-            this.score++;
+            this.cheakpointsReached++;
+            this.score += 1 + 1 / this.timeSinceLastCheak;
+            this.timeSinceLastCheak = 0;
         }
         if (!this.isCrashed) {
             this.x += this.v.x;
@@ -97,7 +112,7 @@ class Car {
         translate(this.x, this.y);
         rotate(this.angle + HALF_PI);
         fill(color);
-        if(this.isCrashed) {
+        if (this.isCrashed) {
             fill(127, 40);
         }
         noStroke();
@@ -137,22 +152,65 @@ class Car {
     }
 
     isCrashing() {
-        const crashDistance = 15;
-        let distance = this.rays.getShortestDistance(walls);
-        if (distance < crashDistance) {
-            return true;
+        for (let i = 0; i < walls.walls.length; i++) {
+            if (
+                isPolyPolyIntersecting(
+                    this.toPoly(),
+                    walls.walls[i].getCoords()
+                )
+            ) {
+                return true;
+            }
         }
         return false;
     }
 
+    toPoly() {
+        const coords = [];
+        const rad = Math.hypot(this.width, this.height) / 2;
+        const alpha = Math.atan2(this.width, this.height);
+        coords.push({
+            x: this.x - Math.sin(this.angle - alpha) * rad,
+            y: this.y - Math.cos(this.angle - alpha) * rad,
+        });
+        coords.push({
+            x: this.x - Math.sin(this.angle + alpha) * rad,
+            y: this.y - Math.cos(this.angle + alpha) * rad,
+        });
+        coords.push({
+            x: this.x - Math.sin(Math.PI + this.angle - alpha) * rad,
+            y: this.y - Math.cos(Math.PI + this.angle - alpha) * rad,
+        });
+        coords.push({
+            x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
+            y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
+        });
+        return coords;
+    }
+
     isToutchingCheakpoint() {
         if (!cheakpoints.walls.length) return;
-        const toutchDistance = 15;
-        let currentCheakpoint = cheakpoints.walls[this.score];
+        const toutchDistance = 10;
+        let currentCheakpoint = cheakpoints.walls[this.cheakpointsReached];
         let distance = this.rays.getDistanceToObject(currentCheakpoint);
         if (distance < toutchDistance) {
             return true;
         }
         return false;
     }
+}
+
+function createCars(amount) {
+    cars = [];
+    for (let i = 0; i < amount; i++) {
+        cars.push(new Car(100, 250, 40, 75, 7, 0.6, "human"));
+    }
+    return cars;
+}
+
+function findBestCar() {
+    const bestCar = cars.find(
+        (c) => c.score == Math.max(...cars.map((c) => c.score))
+    );
+    return bestCar;
 }

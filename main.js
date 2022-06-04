@@ -8,25 +8,24 @@ function setup() {
     const height = 600;
 
     createCanvas(width, height);
-    frameRate(30);
+    frameRate(24);
 
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
     gameMode = "human";
-    cars = createCars(100);
+    cars = createCars(1);
 
     walls.addSideWalls(width, height);
 
-    if(localStorage.getItem("map")) {
-        importMap(localStorage.getItem("map"))
+    if (localStorage.getItem("map")) {
+        importMap(localStorage.getItem("map"));
     }
 
-    if(localStorage.getItem("network")) {
-        console.log(localStorage.getItem("network"))
+    if (localStorage.getItem("network")) {
         cars[0].network = JSON.parse(localStorage.getItem("network"));
         for (let i = 1; i < cars.length; i++) {
             cars[i].network = JSON.parse(localStorage.getItem("network"));
-            if(i != 1) {
+            if (i != 1) {
                 Network.mutate(cars[i].network, 0.2);
             }
         }
@@ -38,16 +37,16 @@ function draw() {
     walls.draw(color(0));
     cheakpoints.draw(color(200, 100, 250));
     let carsAlive = false;
-    for (let i =0; i < cars.length; i++) {
-        if(!cars[i].isCrashed) {
+    for (let i = 0; i < cars.length; i++) {
+        if (!cars[i].isCrashed) {
             i = cars.length;
             carsAlive = true;
         }
     }
-    if(!carsAlive) {
+    if (!carsAlive) {
         for (let i = 1; i < cars.length; i++) {
             cars[i].network = JSON.parse(findBestCar.network);
-            if(i != 1) {
+            if (i != 1) {
                 Network.mutate(cars[i].network, 0.2);
             }
         }
@@ -59,7 +58,7 @@ function draw() {
     }
 
     const bestCar = findBestCar();
-    bestCar.draw(color(255, 0, 0), 1);
+    bestCar.draw(color(0, 0, 255), 1);
 
     if (keyIsDown(49)) {
         gameMode = "human";
@@ -88,7 +87,7 @@ function exportMapToFile() {
     const data = new Blob(
         [JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords })],
         {
-            type: "text/plain"
+            type: "text/plain",
         }
     );
     return window.URL.createObjectURL(data);
@@ -97,7 +96,10 @@ function exportMapToFile() {
 function saveMap() {
     const wallCoords = walls.export();
     const cheakpointCoords = cheakpoints.export();
-    localStorage.setItem("map", JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords }));
+    localStorage.setItem(
+        "map",
+        JSON.stringify({ walls: wallCoords, cheakpoints: cheakpointCoords })
+    );
 }
 
 function removeMap() {
@@ -123,7 +125,7 @@ function mouseClicked() {
 }
 
 const donwloadLink = document.getElementById("download");
-donwloadLink.addEventListener("click", function() {
+donwloadLink.addEventListener("click", function () {
     donwloadLink.href = exportMapToFile();
 });
 
@@ -131,7 +133,7 @@ const uploadBox = document.getElementById("upload");
 uploadBox.onchange = () => {
     let input = event.target;
     let reader = new FileReader();
-    reader.onload = function() {
+    reader.onload = function () {
         importMap(reader.result);
     };
     reader.readAsText(input.files[0]);
