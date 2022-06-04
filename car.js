@@ -185,6 +185,14 @@ class Car {
             x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
             y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
         });
+        for (let i = 0; i < coords.length; i++) {
+            line(
+                coords[i].x,
+                coords[i].y,
+                coords[(i + 1) % coords.length].x,
+                coords[(i + 1) % coords.length].y
+            );
+        }
         return coords;
     }
 
