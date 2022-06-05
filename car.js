@@ -1,7 +1,7 @@
 function createCars(amount) {
     cars = [];
     for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 250, 40, 75, 7, 0.6, "human"));
+        cars.push(new Car(100, 250, 40, 75, 7));
     }
     return cars;
 }
@@ -20,7 +20,7 @@ class Car {
         width,
         height,
         rayCount,
-        speed = 0.2,
+        speed = 0.6,
         controleType = "AI"
     ) {
         this.x = x;
@@ -44,7 +44,6 @@ class Car {
             this.network = new Network([rayCount, 6, 4]);
         }
         this.controls = new Controls();
-
         this.rotate(-HALF_PI);
     }
 
@@ -73,6 +72,8 @@ class Car {
             this.y += this.v.y;
             this.v.x /= this.resistance;
             this.v.y /= this.resistance;
+
+            this.poly = this.toPoly();
 
             this.rays.changeLocation(this.x, this.y);
             switch (this.controlType) {
@@ -116,8 +117,18 @@ class Car {
             fill(127, 40);
         }
         noStroke();
-        rect(-0.5 * this.width, -0.4 * this.height, this.width, this.height);
+        rect(-0.5 * this.width, -0.5 * this.height, this.width, this.height);
         pop();
+        // quad(
+        //     this.poly[0].x,
+        //     this.poly[0].y,
+        //     this.poly[1].x,
+        //     this.poly[1].y,
+        //     this.poly[2].x,
+        //     this.poly[2].y,
+        //     this.poly[3].x,
+        //     this.poly[3].y
+        // );
     }
 
     moveByControls() {
@@ -170,29 +181,21 @@ class Car {
         const rad = Math.hypot(this.width, this.height) / 2;
         const alpha = Math.atan2(this.width, this.height);
         coords.push({
-            x: this.x - Math.sin(this.angle - alpha) * rad,
-            y: this.y - Math.cos(this.angle - alpha) * rad,
+            x: this.x - Math.cos(this.angle - alpha) * rad,
+            y: this.y - Math.sin(this.angle - alpha) * rad,
         });
         coords.push({
-            x: this.x - Math.sin(this.angle + alpha) * rad,
-            y: this.y - Math.cos(this.angle + alpha) * rad,
+            x: this.x - Math.cos(this.angle + alpha) * rad,
+            y: this.y - Math.sin(this.angle + alpha) * rad,
         });
         coords.push({
-            x: this.x - Math.sin(Math.PI + this.angle - alpha) * rad,
-            y: this.y - Math.cos(Math.PI + this.angle - alpha) * rad,
+            x: this.x - Math.cos(Math.PI + this.angle - alpha) * rad,
+            y: this.y - Math.sin(Math.PI + this.angle - alpha) * rad,
         });
         coords.push({
-            x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
-            y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
+            x: this.x - Math.cos(Math.PI + this.angle + alpha) * rad,
+            y: this.y - Math.sin(Math.PI + this.angle + alpha) * rad,
         });
-        for (let i = 0; i < coords.length; i++) {
-            line(
-                coords[i].x,
-                coords[i].y,
-                coords[(i + 1) % coords.length].x,
-                coords[(i + 1) % coords.length].y
-            );
-        }
         return coords;
     }
 
@@ -206,19 +209,4 @@ class Car {
         }
         return false;
     }
-}
-
-function createCars(amount) {
-    cars = [];
-    for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 250, 40, 75, 7, 0.6, "human"));
-    }
-    return cars;
-}
-
-function findBestCar() {
-    const bestCar = cars.find(
-        (c) => c.score == Math.max(...cars.map((c) => c.score))
-    );
-    return bestCar;
 }

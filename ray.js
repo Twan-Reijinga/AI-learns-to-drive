@@ -81,7 +81,7 @@ class Ray {
             this.direction.x + this.x,
             this.direction.y + this.y
         );
-        return isLineLineIntersecting(loc, direction, wall[0], wall[1]);
+        return isLineLineIntersecting(loc, direction, wall[0], wall[1], 1);
     }
 
     getDistance(objects) {

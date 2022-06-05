@@ -13,7 +13,7 @@ function setup() {
     walls = new Walls("wall");
     cheakpoints = new Walls("cheakpoint");
     gameMode = "human";
-    cars = createCars(1);
+    cars = createCars(100);
 
     walls.addSideWalls(width, height);
 
