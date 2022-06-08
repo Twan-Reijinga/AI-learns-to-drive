@@ -40,20 +40,9 @@ class Rays {
         return Math.min(...distances);
     }
 
-    getDistanceToObject(object) {
-        let shortestDistance = Infinity;
-        for (let i = 0; i < this.rays.length; i++) {
-            let newDistance = this.rays[i].getDistanceToObject(object);
-            if (newDistance < shortestDistance) {
-                shortestDistance = newDistance;
-            }
-        }
-        return shortestDistance;
-    }
-
     drawWallIntersections() {
         for (let i = 0; i < this.rays.length; i++) {
-            this.rays[i].drawWallIntersection();
+            this.rays[i].drawIntersection(walls);
         }
     }
 }
@@ -75,19 +64,42 @@ class Ray {
         this.y = y;
     }
 
-    getIntersection(wall) {
+    getIntersection(object) {
         const loc = createVector(this.x, this.y);
         const direction = createVector(
             this.direction.x + this.x,
             this.direction.y + this.y
         );
-        return isLineLineIntersecting(loc, direction, wall[0], wall[1], 1);
+        return isLineLineIntersecting(
+            loc,
+            direction,
+            object.from,
+            object.to,
+            1
+        );
     }
+
+    // getDistanceToObject(object) {
+    //     let intersection = this.getIntersection(object);
+    //     if (intersection) {
+    //         const dX = this.x - intersection.x;
+    //         const dY = this.y - intersection.y;
+    //         let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
+    //         return newDistance;
+    //     }
+    //     return Infinity;
+    // }
 
     getDistance(objects) {
         let shortestDistance = Infinity;
-        for (let i = 0; i < objects.walls.length; i++) {
-            let newDistance = this.getDistanceToObject(objects.walls[i]);
+        for (let i = 0; i < objects.length; i++) {
+            let intersection = this.getIntersection(objects[i]);
+            let newDistance = Infinity;
+            if (intersection) {
+                const dX = this.x - intersection.x;
+                const dY = this.y - intersection.y;
+                newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
+            }
             if (newDistance < shortestDistance) {
                 shortestDistance = newDistance;
             }
@@ -95,25 +107,11 @@ class Ray {
         return shortestDistance;
     }
 
-    getDistanceToObject(object) {
-        let intersection = this.getIntersection(object.getCoords());
-        if (intersection) {
-            const dX = this.x - intersection.x;
-            const dY = this.y - intersection.y;
-            let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
-            return newDistance;
-        }
-        return Infinity;
-    }
-
-    drawWallIntersection() {
+    drawIntersection(walls) {
         let distance = this.getDistance(walls);
         stroke(0, 255, 0);
-        let intersectionX = this.direction.x * distance;
-        let intersectionY = this.direction.y * distance;
-        push();
-        translate(this.x, this.y);
-        line(0, 0, intersectionX, intersectionY);
-        pop();
+        let intersectionX = this.direction.x * distance + this.x;
+        let intersectionY = this.direction.y * distance + this.y;
+        line(this.x, this.y, intersectionX, intersectionY);
     }
 }

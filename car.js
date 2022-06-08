@@ -1,7 +1,7 @@
 function createCars(amount) {
     cars = [];
     for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 250, 40, 75, 7));
+        cars.push(new Car(100, 250, 40, 75, 7, 0.8, "Human"));
     }
     return cars;
 }
@@ -20,7 +20,7 @@ class Car {
         width,
         height,
         rayCount,
-        speed = 0.6,
+        speed = 0.8,
         controleType = "AI"
     ) {
         this.x = x;
@@ -51,8 +51,8 @@ class Car {
         this.timeSinceLastCheak++;
         this.moveByControls();
         if (
-            cheakpoints.walls.length &&
-            this.cheakpointsReached == cheakpoints.walls.length
+            cheakpoints.length &&
+            this.cheakpointsReached == cheakpoints.length
         ) {
             // car won!
             alert("Car reached finish!");
@@ -81,7 +81,7 @@ class Car {
                     const distances = this.rays.getDistances(walls);
                     this.prossesNetworkControls(distances);
                     break;
-                case "human":
+                case "Human":
                     this.controls.prossesHumanControls();
                     break;
             }
@@ -119,16 +119,6 @@ class Car {
         noStroke();
         rect(-0.5 * this.width, -0.5 * this.height, this.width, this.height);
         pop();
-        // quad(
-        //     this.poly[0].x,
-        //     this.poly[0].y,
-        //     this.poly[1].x,
-        //     this.poly[1].y,
-        //     this.poly[2].x,
-        //     this.poly[2].y,
-        //     this.poly[3].x,
-        //     this.poly[3].y
-        // );
     }
 
     moveByControls() {
@@ -163,13 +153,17 @@ class Car {
     }
 
     isCrashing() {
-        for (let i = 0; i < walls.walls.length; i++) {
-            if (
-                isPolyPolyIntersecting(
-                    this.toPoly(),
-                    walls.walls[i].getCoords()
-                )
-            ) {
+        for (let i = 0; i < walls.length; i++) {
+            if (isPolyLineIntersecting(this.toPoly(), walls[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isToutchingCheakpoint() {
+        for (let i = 0; i < cheakpoints.length; i++) {
+            if (isPolyLineIntersecting(this.toPoly(), cheakpoints[i])) {
                 return true;
             }
         }
@@ -197,16 +191,5 @@ class Car {
             y: this.y - Math.sin(Math.PI + this.angle + alpha) * rad,
         });
         return coords;
-    }
-
-    isToutchingCheakpoint() {
-        if (!cheakpoints.walls.length) return;
-        const toutchDistance = 10;
-        let currentCheakpoint = cheakpoints.walls[this.cheakpointsReached];
-        let distance = this.rays.getDistanceToObject(currentCheakpoint);
-        if (distance < toutchDistance) {
-            return true;
-        }
-        return false;
     }
 }

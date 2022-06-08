@@ -23,18 +23,16 @@ function isLineLineIntersecting(from1, to1, from2, to2, firstIsRay) {
     return false;
 }
 
-function isPolyPolyIntersecting(poly1, poly2) {
-    for (let i = 0; i < poly1.length; i++) {
-        for (let j = 0; j < poly2.length; j++) {
-            const intersection = isLineLineIntersecting(
-                poly1[i],
-                poly1[(i + 1) % poly1.length],
-                poly2[j],
-                poly2[(j + 1) % poly2.length]
-            );
-            if (intersection) {
-                return true;
-            }
+function isPolyLineIntersecting(poly, line) {
+    for (let i = 0; i < poly.length; i++) {
+        const intersection = isLineLineIntersecting(
+            poly[i],
+            poly[(i + 1) % poly.length],
+            line.from,
+            line.to
+        );
+        if (intersection) {
+            return true;
         }
     }
     return;
