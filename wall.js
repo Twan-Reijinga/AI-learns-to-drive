@@ -41,39 +41,4 @@ class WallsMaker {
         this.previous = newCoord;
         return walls;
     }
-
-    import(coords) {
-        for (let i = 0; i < coords.length; i++) {
-            let from = createVector(coords[i].from.x, coords[i].from.y);
-            let to = createVector(coords[i].to.x, coords[i].to.y);
-            this.walls.push(new Wall(from, to));
-        }
-    }
-
-    export() {
-        let allCoords = [];
-        for (let i = 0; i < this.walls.length; i++) {
-            let coords = this.walls[i].getCoords();
-            allCoords.push({
-                from: { x: coords[0].x, y: coords[0].y },
-                to: { x: coords[1].x, y: coords[1].y },
-            });
-        }
-        return allCoords;
-    }
 }
-
-// class Wall {
-//     constructor(from, to) {
-//         this.from = from;
-//         this.to = to;
-//     }
-
-//     draw() {
-//         line(this.from.x, this.from.y, this.to.x, this.to.y);
-//     }
-
-//     getCoords() {
-//         return [this.from, this.to];
-//     }
-// }

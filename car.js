@@ -44,12 +44,12 @@ class Car {
             this.network = new Network([rayCount, 6, 4]);
         }
         this.controls = new Controls();
-        this.rotate(-HALF_PI);
+        this.#rotate(-HALF_PI);
     }
 
     update() {
         this.timeSinceLastCheak++;
-        this.moveByControls();
+        this.#moveByControls();
         if (
             cheakpoints.length &&
             this.cheakpointsReached == cheakpoints.length
@@ -73,13 +73,11 @@ class Car {
             this.v.x /= this.resistance;
             this.v.y /= this.resistance;
 
-            this.poly = this.toPoly();
-
             this.rays.changeLocation(this.x, this.y);
             switch (this.controlType) {
                 case "AI":
                     const distances = this.rays.getDistances(walls);
-                    this.prossesNetworkControls(distances);
+                    this.#prossesNetworkControls(distances);
                     break;
                 case "Human":
                     this.controls.prossesHumanControls();
@@ -88,7 +86,7 @@ class Car {
         }
     }
 
-    prossesNetworkControls(distances) {
+    #prossesNetworkControls(distances) {
         const outputs = Network.getOutputs(this.network, distances);
         this.controls.reset();
         if (outputs[0]) {
@@ -105,6 +103,33 @@ class Car {
         }
     }
 
+    #moveByControls() {
+        if (this.controls.forward) {
+            this.#move(1);
+        }
+        if (this.controls.back) {
+            this.#move(-1);
+        }
+        if (this.controls.left) {
+            this.#rotate(-0.01 * PI);
+        }
+        if (this.controls.right) {
+            this.#rotate(0.01 * PI);
+        }
+        this.controls.reset();
+    }
+
+    #rotate(rotation) {
+        this.angle += rotation;
+        this.rays.rotate(rotation);
+    }
+
+    #move(direction) {
+        let vX = cos(this.angle) * this.speed * direction;
+        let vY = sin(this.angle) * this.speed * direction;
+        this.v.add(vX, vY);
+    }
+
     draw(color, isRayVisible) {
         if (isRayVisible) {
             this.rays.drawWallIntersections();
@@ -119,37 +144,6 @@ class Car {
         noStroke();
         rect(-0.5 * this.width, -0.5 * this.height, this.width, this.height);
         pop();
-    }
-
-    moveByControls() {
-        if (this.controls.forward) {
-            this.move(1);
-        }
-        if (this.controls.back) {
-            this.move(-1);
-        }
-        if (this.controls.left) {
-            this.rotate(-0.01 * PI);
-        }
-        if (this.controls.right) {
-            this.rotate(0.01 * PI);
-        }
-        this.controls.reset();
-    }
-
-    rotate(rotation) {
-        this.angle += rotation;
-        this.rays.rotate(rotation);
-    }
-
-    move(direction) {
-        let vX = cos(this.angle) * this.speed * direction;
-        let vY = sin(this.angle) * this.speed * direction;
-        this.v.add(vX, vY);
-    }
-
-    getDistances(objects) {
-        return this.rays.getDistances(objects);
     }
 
     isCrashing() {

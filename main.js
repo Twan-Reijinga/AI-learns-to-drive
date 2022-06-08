@@ -76,14 +76,14 @@ function draw() {
 
 function importMap(txt) {
     const coords = JSON.parse(txt);
+    walls = coords.walls;
+    cheakpoints = coords.cheakpoints;
     // walls.import(coords.walls);
     // cheakpoints.import(coords.cheakpoints);
 }
 
 function exportMapToFile() {
     donwloadLink.download = prompt("save file as: ") + ".json";
-    const wallCoords = walls.export();
-    const cheakpointCoords = cheakpoints.export();
     const data = new Blob(
         [JSON.stringify({ walls: walls, cheakpoints: cheakpoints })],
         {

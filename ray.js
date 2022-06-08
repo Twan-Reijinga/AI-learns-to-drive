@@ -79,17 +79,6 @@ class Ray {
         );
     }
 
-    // getDistanceToObject(object) {
-    //     let intersection = this.getIntersection(object);
-    //     if (intersection) {
-    //         const dX = this.x - intersection.x;
-    //         const dY = this.y - intersection.y;
-    //         let newDistance = sqrt(pow(dX, 2) + pow(dY, 2));
-    //         return newDistance;
-    //     }
-    //     return Infinity;
-    // }
-
     getDistance(objects) {
         let shortestDistance = Infinity;
         for (let i = 0; i < objects.length; i++) {
