@@ -1,9 +1,3 @@
-function drawCheakpoints() {
-    setTimeout(() => {
-        mode = "cheakpointBuild";
-    }, 1);
-}
-
 class Rays {
     constructor(x, y, amount) {
         this.rays = [];

@@ -1,18 +1,3 @@
-function createCars(amount) {
-    cars = [];
-    for (let i = 0; i < amount; i++) {
-        cars.push(new Car(100, 250, 40, 75, 7, 0.8, "Human"));
-    }
-    return cars;
-}
-
-function findBestCar() {
-    const bestCar = cars.find(
-        (c) => c.score == Math.max(...cars.map((c) => c.score))
-    );
-    return bestCar;
-}
-
 class Car {
     constructor(
         x,
@@ -45,6 +30,20 @@ class Car {
         }
         this.controls = new Controls();
         this.#rotate(-HALF_PI);
+    }
+
+    static addCars(amount, controleType) {
+        cars = [];
+        for (let i = 0; i < amount; i++) {
+            cars.push(new Car(100, 250, 40, 75, 7, 0.8, controleType));
+        }
+        return cars;
+    }
+
+    static findBestCar(cars) {
+        return cars.find(
+            (c) => c.score == Math.max(...cars.map((c) => c.score))
+        );
     }
 
     update() {

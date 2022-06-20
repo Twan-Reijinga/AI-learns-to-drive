@@ -1,7 +1,6 @@
 let cars = [];
 let walls = [];
 let cheakpoints = [];
-// let wallMaker;
 let mode;
 
 function setup() {
@@ -10,13 +9,10 @@ function setup() {
 
     createCanvas(width, height);
     frameRate(24);
-
-    // wallMaker = new WallsMaker();
-    // cheakpoints = new Walls("cheakpoint");
     mode = "pause";
-    cars = createCars(1);
+    cars = Car.addCars(1, "Human");
 
-    walls = sideWalls(width, height);
+    walls = Walls.sideWalls(width, height);
 
     if (localStorage.getItem("map")) {
         importMap(localStorage.getItem("map"));
@@ -35,88 +31,8 @@ function setup() {
 
 function draw() {
     background(220);
-    stroke(color(0));
-    for (let i = 0; i < walls.length; i++) {
-        if (walls[i].to) {
-            line(
-                walls[i].from.x,
-                walls[i].from.y,
-                walls[i].to.x,
-                walls[i].to.y
-            );
-        }
-    }
-
-    stroke(color(200, 100, 250));
-    for (let i = 0; i < cheakpoints.length; i++) {
-        if (cheakpoints[i].to) {
-            line(
-                cheakpoints[i].from.x,
-                cheakpoints[i].from.y,
-                cheakpoints[i].to.x,
-                cheakpoints[i].to.y
-            );
-        }
-    }
-
-    if (mode == "cheakpointBuild") {
-        stroke(color(200, 100, 250));
-        strokeWeight(10);
-        point(mouseX, mouseY);
-        strokeWeight(1);
-    }
-
-    if (mode == "wallBuild") {
-        stroke(color(0));
-        strokeWeight(10);
-        point(mouseX, mouseY);
-        strokeWeight(1);
-    }
-
-    if (mode == "wallBuild" && !walls[walls.length - 1].to) {
-        line(
-            mouseX,
-            mouseY,
-            walls[walls.length - 1].from.x,
-            walls[walls.length - 1].from.y
-        );
-    }
-
-    if (mode == "wallBuild" && keyIsDown(SHIFT) && walls[walls.length - 1].to) {
-        line(
-            mouseX,
-            mouseY,
-            walls[walls.length - 1].to.x,
-            walls[walls.length - 1].to.y
-        );
-    }
-
-    if (
-        mode == "cheakpointBuild" &&
-        cheakpoints.length &&
-        !cheakpoints[cheakpoints.length - 1].to
-    ) {
-        line(
-            mouseX,
-            mouseY,
-            cheakpoints[cheakpoints.length - 1].from.x,
-            cheakpoints[cheakpoints.length - 1].from.y
-        );
-    }
-
-    if (
-        mode == "cheakpointBuild" &&
-        keyIsDown(SHIFT) &&
-        cheakpoints.length &&
-        cheakpoints[cheakpoints.length - 1].to
-    ) {
-        line(
-            mouseX,
-            mouseY,
-            cheakpoints[cheakpoints.length - 1].to.x,
-            cheakpoints[cheakpoints.length - 1].to.y
-        );
-    }
+    Walls.draw(color(0));
+    Cheakpoints.draw(color(200, 100, 250));
 
     // let carsAlive = false;
     // for (let i = 0; i < cars.length; i++) {
@@ -139,7 +55,7 @@ function draw() {
         cars[i].draw(color(255, 0, 0, 50), 0);
     }
 
-    const bestCar = findBestCar();
+    const bestCar = Car.findBestCar(cars);
     bestCar.draw(color(0, 0, 255), 1);
 }
 
