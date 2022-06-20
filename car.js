@@ -20,9 +20,8 @@ class Car {
 
         this.rays = new Rays(x, y, rayCount);
         this.isCrashed = false;
-        this.cheakpointsReached = 0;
         this.score = 0;
-        this.timeSinceLastCheak = 0;
+        this.timeSinceCheakpoint = 0;
         this.controlType = controleType;
 
         if (controleType == "AI") {
@@ -47,24 +46,23 @@ class Car {
     }
 
     update() {
-        this.timeSinceLastCheak++;
+        this.timeSinceCheakpoint++;
         this.#moveByControls();
-        if (
-            cheakpoints.length &&
-            this.cheakpointsReached == cheakpoints.length
-        ) {
-            // car won!
+        if (cheakpoints.length && this.score == cheakpoints.length) {
             alert("Car reached finish!");
             return;
         }
-        if (this.isCrashed || this.isCrashing()) {
+        if (
+            this.isCrashed ||
+            this.isCrashing() ||
+            (this.controlType == "AI" && this.timeSinceCheakpoint > 120)
+        ) {
             this.isCrashed = true;
             return;
         }
         if (this.isToutchingCheakpoint()) {
-            this.cheakpointsReached++;
-            this.score += 1 + 1 / this.timeSinceLastCheak;
-            this.timeSinceLastCheak = 0;
+            this.timeSinceCheakpoint = 0;
+            this.score++;
         }
         if (!this.isCrashed) {
             this.x += this.v.x;
@@ -158,19 +156,18 @@ class Car {
     }
 
     isToutchingCheakpoint() {
-        for (let i = 0; i < cheakpoints.length; i++) {
-            if (
-                cheakpoints[i].to &&
-                isPolyLineIntersecting(this.toPoly(), cheakpoints[i])
-            ) {
-                return true;
-            }
+        if (
+            cheakpoints.length > this.score &&
+            cheakpoints[this.score].to &&
+            isPolyLineIntersecting(this.toPoly(), cheakpoints[this.score])
+        ) {
+            return true;
         }
         return false;
     }
 
     toPoly() {
-        const coords = [];
+        let coords = [];
         const rad = Math.hypot(this.width, this.height) / 2;
         const alpha = Math.atan2(this.width, this.height);
         coords.push({

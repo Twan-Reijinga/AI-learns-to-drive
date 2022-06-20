@@ -10,7 +10,7 @@ function setup() {
     createCanvas(width, height);
     frameRate(24);
     mode = "pause";
-    cars = Car.addCars(1, "Human");
+    cars = Car.addCars(1, "AI");
 
     walls = Walls.sideWalls(width, height);
 
