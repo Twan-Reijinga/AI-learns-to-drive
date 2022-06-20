@@ -1,5 +1,8 @@
 class Walls {
     static enableDrawing() {
+        if (!walls[walls.length - 1].to) {
+            walls.pop();
+        }
         setTimeout(() => {
             mode = "wallBuild";
         }, 1);
@@ -57,6 +60,19 @@ class Walls {
                     walls[walls.length - 1].to.y
                 );
             }
+        }
+    }
+
+    static build() {
+        const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
+        let lastCoord = walls[walls.length - 1].to;
+
+        if (walls.length && lastCoord && keyIsDown(SHIFT)) {
+            walls.push({ from: lastCoord, to: newCoord });
+        } else if (!walls.length || lastCoord) {
+            walls.push({ from: newCoord });
+        } else {
+            walls[walls.length - 1].to = newCoord;
         }
     }
 }

@@ -8,9 +8,9 @@ function setup() {
     const height = 600;
 
     createCanvas(width, height);
-    frameRate(24);
+    frameRate(20);
     mode = "pause";
-    cars = Car.addCars(20, "AI");
+    cars = Car.addCars(1, "Human");
 
     walls = Walls.sideWalls(width, height);
 
@@ -18,7 +18,7 @@ function setup() {
         importMap(localStorage.getItem("map"));
     }
 
-    if (localStorage.getItem("network")) {
+    if (localStorage.getItem("network") && cars[0].controlType == "AI") {
         cars[0].network = JSON.parse(localStorage.getItem("network"));
         for (let i = 1; i < cars.length; i++) {
             cars[i].network = JSON.parse(localStorage.getItem("network"));
@@ -42,20 +42,20 @@ function draw() {
             carsAlive = true;
         }
     }
-    if (!carsAlive) {
+    if (!carsAlive && bestCar.network) {
         const bestNetwork = JSON.stringify(bestCar.network);
         cars = Car.addCars(cars.length, "AI");
 
         for (let i = 0; i < cars.length; i++) {
             cars[i].network = JSON.parse(bestNetwork);
             if (i != 0) {
-                Network.mutate(cars[i].network, 0.2);
+                Network.mutate(cars[i].network, 0.3);
             }
         }
     }
     for (let i = 0; i < cars.length; i++) {
         cars[i].update();
-        cars[i].draw(color(255, 0, 0, 50), 0);
+        cars[i].draw(color(255, 0, 0, 20), 0);
     }
     bestCar.draw(color(0, 0, 255), 1);
 }
@@ -89,7 +89,10 @@ function removeMap() {
 }
 
 function saveBestNetwork() {
-    localStorage.setItem("network", JSON.stringify(findBestCar().network));
+    localStorage.setItem(
+        "network",
+        JSON.stringify(Car.findBestCar(cars).network)
+    );
 }
 
 function removeBestNetwork() {
@@ -98,29 +101,9 @@ function removeBestNetwork() {
 
 function mouseClicked() {
     if (mode == "wallBuild") {
-        const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
-        let lastCoord = walls[walls.length - 1].to;
-
-        if (walls.length && lastCoord && keyIsDown(SHIFT)) {
-            walls.push({ from: lastCoord, to: newCoord });
-        } else if (!walls.length || lastCoord) {
-            walls.push({ from: newCoord });
-        } else {
-            walls[walls.length - 1].to = newCoord;
-        }
+        Walls.build();
     } else if (mode == "cheakpointBuild") {
-        const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
-        if (cheakpoints.length) {
-            var lastCoord = cheakpoints[cheakpoints.length - 1].to;
-        }
-
-        if (cheakpoints.length && lastCoord && keyIsDown(SHIFT)) {
-            cheakpoints.push({ from: lastCoord, to: newCoord });
-        } else if (!cheakpoints.length || lastCoord) {
-            cheakpoints.push({ from: newCoord });
-        } else {
-            cheakpoints[cheakpoints.length - 1].to = newCoord;
-        }
+        Cheakpoints.build();
     }
 }
 

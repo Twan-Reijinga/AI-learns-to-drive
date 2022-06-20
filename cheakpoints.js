@@ -1,5 +1,8 @@
 class Cheakpoints {
     static enableDrawing() {
+        if (!cheakpoints[cheakpoints.length - 1].to) {
+            cheakpoints.pop();
+        }
         setTimeout(() => {
             mode = "cheakpointBuild";
         }, 1);
@@ -43,6 +46,21 @@ class Cheakpoints {
                     cheakpoints[cheakpoints.length - 1].to.y
                 );
             }
+        }
+    }
+
+    static build() {
+        const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
+        if (cheakpoints.length) {
+            var lastCoord = cheakpoints[cheakpoints.length - 1].to;
+        }
+
+        if (cheakpoints.length && lastCoord && keyIsDown(SHIFT)) {
+            cheakpoints.push({ from: lastCoord, to: newCoord });
+        } else if (!cheakpoints.length || lastCoord) {
+            cheakpoints.push({ from: newCoord });
+        } else {
+            cheakpoints[cheakpoints.length - 1].to = newCoord;
         }
     }
 }

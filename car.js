@@ -1,22 +1,14 @@
 class Car {
-    constructor(
-        x,
-        y,
-        width,
-        height,
-        rayCount,
-        speed = 0.8,
-        controleType = "AI"
-    ) {
+    constructor(x, y, width, height, rayCount, controleType) {
         this.x = x;
         this.y = y;
-        this.v = createVector(0, 0);
-
-        this.angle = 0;
         this.width = width;
         this.height = height;
-        this.speed = speed;
-        this.resistance = 1.04;
+        this.angle = 0;
+        this.speed = 0;
+        this.maxSpeed = 8;
+        this.acc = 2;
+        this.friction = 0.5;
 
         this.rays = new Rays(x, y, rayCount);
         this.isCrashed = false;
@@ -34,7 +26,7 @@ class Car {
     static addCars(amount, controleType) {
         cars = [];
         for (let i = 0; i < amount; i++) {
-            cars.push(new Car(100, 250, 40, 75, 7, 0.8, controleType));
+            cars.push(new Car(100, 250, 40, 75, 7, controleType));
         }
         return cars;
     }
@@ -47,29 +39,20 @@ class Car {
 
     update() {
         this.timeSinceCheakpoint++;
-        this.#moveByControls();
-        if (cheakpoints.length && this.score == cheakpoints.length) {
-            alert("Car reached finish!");
-            return;
-        }
         if (
             this.isCrashed ||
-            this.isCrashing() ||
-            (this.controlType == "AI" && this.timeSinceCheakpoint > 120)
+            this.#isCrashing() ||
+            (this.controlType == "AI" && this.timeSinceCheakpoint > 60)
         ) {
             this.isCrashed = true;
+            this.score = 0;
             return;
         }
-        if (this.isToutchingCheakpoint()) {
+        if (this.#isToutchingCheakpoint()) {
             this.timeSinceCheakpoint = 0;
             this.score++;
         }
         if (!this.isCrashed) {
-            this.x += this.v.x;
-            this.y += this.v.y;
-            this.v.x /= this.resistance;
-            this.v.y /= this.resistance;
-
             this.rays.changeLocation(this.x, this.y);
             switch (this.controlType) {
                 case "AI":
@@ -80,7 +63,24 @@ class Car {
                     this.controls.prossesHumanControls();
                     break;
             }
+            this.#move();
         }
+    }
+
+    draw(color, isRayVisible) {
+        if (isRayVisible) {
+            this.rays.drawWallIntersections();
+        }
+        push();
+        translate(this.x, this.y);
+        rotate(this.angle + HALF_PI);
+        fill(color);
+        if (this.isCrashed) {
+            fill(127, 10);
+        }
+        noStroke();
+        rect(-0.5 * this.width, -0.5 * this.height, this.width, this.height);
+        pop();
     }
 
     #prossesNetworkControls(distances) {
@@ -100,20 +100,40 @@ class Car {
         }
     }
 
-    #moveByControls() {
+    #move() {
         if (this.controls.forward) {
-            this.#move(1);
+            this.speed += this.acc;
         }
         if (this.controls.back) {
-            this.#move(-1);
+            this.speed -= this.acc;
         }
         if (this.controls.left) {
-            this.#rotate(-0.01 * PI);
+            this.#rotate(-0.02 * PI);
         }
         if (this.controls.right) {
-            this.#rotate(0.01 * PI);
+            this.#rotate(0.02 * PI);
+        }
+
+        if (this.speed > this.maxSpeed) {
+            this.speed = this.maxSpeed;
+        }
+        if (this.speed < -this.maxSpeed) {
+            this.speed = -this.maxSpeed;
+        }
+
+        if (this.speed > 0) {
+            this.speed -= this.friction;
+        }
+        if (this.speed < 0) {
+            this.speed += this.friction;
+        }
+        if (abs(this.speed) < this.friction) {
+            this.speed = 0;
         }
         this.controls.reset();
+
+        this.x += cos(this.angle) * this.speed;
+        this.y += sin(this.angle) * this.speed;
     }
 
     #rotate(rotation) {
@@ -121,33 +141,11 @@ class Car {
         this.rays.rotate(rotation);
     }
 
-    #move(direction) {
-        let vX = cos(this.angle) * this.speed * direction;
-        let vY = sin(this.angle) * this.speed * direction;
-        this.v.add(vX, vY);
-    }
-
-    draw(color, isRayVisible) {
-        if (isRayVisible) {
-            this.rays.drawWallIntersections();
-        }
-        push();
-        translate(this.x, this.y);
-        rotate(this.angle + HALF_PI);
-        fill(color);
-        if (this.isCrashed) {
-            fill(127, 40);
-        }
-        noStroke();
-        rect(-0.5 * this.width, -0.5 * this.height, this.width, this.height);
-        pop();
-    }
-
-    isCrashing() {
+    #isCrashing() {
         for (let i = 0; i < walls.length; i++) {
             if (
                 walls[i].to &&
-                isPolyLineIntersecting(this.toPoly(), walls[i])
+                isPolyLineIntersecting(this.#toPoly(), walls[i])
             ) {
                 return true;
             }
@@ -155,18 +153,18 @@ class Car {
         return false;
     }
 
-    isToutchingCheakpoint() {
+    #isToutchingCheakpoint() {
+        const nextCheakpoint = this.score % (cheakpoints.length - 1);
         if (
-            cheakpoints.length > this.score &&
-            cheakpoints[this.score].to &&
-            isPolyLineIntersecting(this.toPoly(), cheakpoints[this.score])
+            cheakpoints[nextCheakpoint].to &&
+            isPolyLineIntersecting(this.#toPoly(), cheakpoints[nextCheakpoint])
         ) {
             return true;
         }
         return false;
     }
 
-    toPoly() {
+    #toPoly() {
         let coords = [];
         const rad = Math.hypot(this.width, this.height) / 2;
         const alpha = Math.atan2(this.width, this.height);
