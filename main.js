@@ -37,15 +37,48 @@ function draw() {
     background(220);
     stroke(color(0));
     for (let i = 0; i < walls.length; i++) {
-        line(walls[i].from.x, walls[i].from.y, walls[i].to.x, walls[i].to.y);
+        if (walls[i].to) {
+            line(
+                walls[i].from.x,
+                walls[i].from.y,
+                walls[i].to.x,
+                walls[i].to.y
+            );
+        }
     }
+
     stroke(color(200, 100, 250));
     for (let i = 0; i < cheakpoints.length; i++) {
+        if (cheakpoints[i].to) {
+            line(
+                cheakpoints[i].from.x,
+                cheakpoints[i].from.y,
+                cheakpoints[i].to.x,
+                cheakpoints[i].to.y
+            );
+        }
+    }
+
+    if (mode == "cheakpointBuild") {
+        stroke(color(200, 100, 250));
+        strokeWeight(10);
+        point(mouseX, mouseY);
+        strokeWeight(1);
+    }
+
+    if (mode == "wallBuild") {
+        stroke(color(0));
+        strokeWeight(10);
+        point(mouseX, mouseY);
+        strokeWeight(1);
+    }
+
+    if (mode == "wallBuild" && walls.length && !walls[walls.length - 1].to) {
         line(
-            cheakpoints[i].from.x,
-            cheakpoints[i].from.y,
-            cheakpoints[i].to.x,
-            cheakpoints[i].to.y
+            mouseX,
+            mouseY,
+            walls[length - 1].from.x,
+            walls[length - 1].from.y
         );
     }
 
@@ -78,8 +111,6 @@ function importMap(txt) {
     const coords = JSON.parse(txt);
     walls = coords.walls;
     cheakpoints = coords.cheakpoints;
-    // walls.import(coords.walls);
-    // cheakpoints.import(coords.cheakpoints);
 }
 
 function exportMapToFile() {
@@ -116,21 +147,19 @@ function mouseClicked() {
     if (mode == "wallBuild") {
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
 
-        if (walls[walls.length - 1].to || !walls.length) {
+        if (!walls.length || walls[walls.length - 1].to) {
             walls.push({ from: newCoord });
         } else {
             walls[walls.length - 1].to = newCoord;
         }
-        console.log(walls);
     } else if (mode == "cheakpointBuild") {
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
 
-        if (cheakpoints[cheakpoints.length - 1].to || !cheakpoints.length) {
+        if (!cheakpoints.length || cheakpoints[cheakpoints.length - 1].to) {
             cheakpoints.push({ from: newCoord });
         } else {
-            cheakpoints[walls.length - 1].to = newCoord;
+            cheakpoints[cheakpoints.length - 1].to = newCoord;
         }
-        console.log(cheakpoints);
     }
 }
 

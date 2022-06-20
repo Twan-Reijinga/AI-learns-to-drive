@@ -1,3 +1,7 @@
+function drawCheakpoints() {
+    mode = "cheakpointBuild";
+}
+
 class Rays {
     constructor(x, y, amount) {
         this.rays = [];
@@ -70,6 +74,9 @@ class Ray {
             this.direction.x + this.x,
             this.direction.y + this.y
         );
+        if (!object.to) {
+            return false;
+        }
         return isLineLineIntersecting(
             loc,
             direction,

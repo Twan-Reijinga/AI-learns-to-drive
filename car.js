@@ -148,7 +148,10 @@ class Car {
 
     isCrashing() {
         for (let i = 0; i < walls.length; i++) {
-            if (isPolyLineIntersecting(this.toPoly(), walls[i])) {
+            if (
+                walls[i].to &&
+                isPolyLineIntersecting(this.toPoly(), walls[i])
+            ) {
                 return true;
             }
         }
@@ -157,7 +160,10 @@ class Car {
 
     isToutchingCheakpoint() {
         for (let i = 0; i < cheakpoints.length; i++) {
-            if (isPolyLineIntersecting(this.toPoly(), cheakpoints[i])) {
+            if (
+                cheakpoints[i].to &&
+                isPolyLineIntersecting(this.toPoly(), cheakpoints[i])
+            ) {
                 return true;
             }
         }

@@ -1,3 +1,7 @@
+function drawWalls() {
+    mode = "wallBuild";
+}
+
 function sideWalls(w, h) {
     let xCoords = [-1, -1, w, w];
     let yCoords = [-1, h, h, -1];
