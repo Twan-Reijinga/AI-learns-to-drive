@@ -1,5 +1,7 @@
 function drawWalls() {
-    mode = "wallBuild";
+    setTimeout(() => {
+        mode = "wallBuild";
+    }, 1);
 }
 
 function sideWalls(w, h) {

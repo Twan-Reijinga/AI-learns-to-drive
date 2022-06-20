@@ -73,12 +73,48 @@ function draw() {
         strokeWeight(1);
     }
 
-    if (mode == "wallBuild" && walls.length && !walls[walls.length - 1].to) {
+    if (mode == "wallBuild" && !walls[walls.length - 1].to) {
         line(
             mouseX,
             mouseY,
-            walls[length - 1].from.x,
-            walls[length - 1].from.y
+            walls[walls.length - 1].from.x,
+            walls[walls.length - 1].from.y
+        );
+    }
+
+    if (mode == "wallBuild" && keyIsDown(SHIFT) && walls[walls.length - 1].to) {
+        line(
+            mouseX,
+            mouseY,
+            walls[walls.length - 1].to.x,
+            walls[walls.length - 1].to.y
+        );
+    }
+
+    if (
+        mode == "cheakpointBuild" &&
+        cheakpoints.length &&
+        !cheakpoints[cheakpoints.length - 1].to
+    ) {
+        line(
+            mouseX,
+            mouseY,
+            cheakpoints[cheakpoints.length - 1].from.x,
+            cheakpoints[cheakpoints.length - 1].from.y
+        );
+    }
+
+    if (
+        mode == "cheakpointBuild" &&
+        keyIsDown(SHIFT) &&
+        cheakpoints.length &&
+        cheakpoints[cheakpoints.length - 1].to
+    ) {
+        line(
+            mouseX,
+            mouseY,
+            cheakpoints[cheakpoints.length - 1].to.x,
+            cheakpoints[cheakpoints.length - 1].to.y
         );
     }
 
@@ -146,16 +182,24 @@ function removeBestNetwork() {
 function mouseClicked() {
     if (mode == "wallBuild") {
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
+        let lastCoord = walls[walls.length - 1].to;
 
-        if (!walls.length || walls[walls.length - 1].to) {
+        if (walls.length && lastCoord && keyIsDown(SHIFT)) {
+            walls.push({ from: lastCoord, to: newCoord });
+        } else if (!walls.length || lastCoord) {
             walls.push({ from: newCoord });
         } else {
             walls[walls.length - 1].to = newCoord;
         }
     } else if (mode == "cheakpointBuild") {
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
+        if (cheakpoints.length) {
+            var lastCoord = cheakpoints[cheakpoints.length - 1].to;
+        }
 
-        if (!cheakpoints.length || cheakpoints[cheakpoints.length - 1].to) {
+        if (cheakpoints.length && lastCoord && keyIsDown(SHIFT)) {
+            cheakpoints.push({ from: lastCoord, to: newCoord });
+        } else if (!cheakpoints.length || lastCoord) {
             cheakpoints.push({ from: newCoord });
         } else {
             cheakpoints[cheakpoints.length - 1].to = newCoord;

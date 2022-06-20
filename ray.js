@@ -1,5 +1,7 @@
 function drawCheakpoints() {
-    mode = "cheakpointBuild";
+    setTimeout(() => {
+        mode = "cheakpointBuild";
+    }, 1);
 }
 
 class Rays {
