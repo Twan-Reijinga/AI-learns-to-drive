@@ -10,7 +10,7 @@ function setup() {
     createCanvas(width, height);
     frameRate(24);
     mode = "pause";
-    cars = Car.addCars(1, "AI");
+    cars = Car.addCars(20, "AI");
 
     walls = Walls.sideWalls(width, height);
 
@@ -34,28 +34,29 @@ function draw() {
     Walls.draw(color(0));
     Cheakpoints.draw(color(200, 100, 250));
 
-    // let carsAlive = false;
-    // for (let i = 0; i < cars.length; i++) {
-    //     if (!cars[i].isCrashed) {
-    //         i = cars.length;
-    //         carsAlive = true;
-    //     }
-    // }
-    // if (!carsAlive) {
-    //     for (let i = 1; i < cars.length; i++) {
-    //         cars[i].network = JSON.parse(findBestCar.network);
-    //         if (i != 1) {
-    //             Network.mutate(cars[i].network, 0.2);
-    //         }
-    //     }
-    // }
+    const bestCar = Car.findBestCar(cars);
+    let carsAlive = false;
+    for (let i = 0; i < cars.length; i++) {
+        if (!cars[i].isCrashed) {
+            i = cars.length;
+            carsAlive = true;
+        }
+    }
+    if (!carsAlive) {
+        const bestNetwork = JSON.stringify(bestCar.network);
+        cars = Car.addCars(cars.length, "AI");
 
+        for (let i = 0; i < cars.length; i++) {
+            cars[i].network = JSON.parse(bestNetwork);
+            if (i != 0) {
+                Network.mutate(cars[i].network, 0.2);
+            }
+        }
+    }
     for (let i = 0; i < cars.length; i++) {
         cars[i].update();
         cars[i].draw(color(255, 0, 0, 50), 0);
     }
-
-    const bestCar = Car.findBestCar(cars);
     bestCar.draw(color(0, 0, 255), 1);
 }
 
