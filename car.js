@@ -120,10 +120,10 @@ class Car {
             this.speed -= this.acc;
         }
         if (this.controls.left) {
-            this.#rotate(-0.02 * PI);
+            this.#rotate(-0.015 * PI);
         }
         if (this.controls.right) {
-            this.#rotate(0.02 * PI);
+            this.#rotate(0.015 * PI);
         }
 
         if (this.speed > this.maxSpeed) {

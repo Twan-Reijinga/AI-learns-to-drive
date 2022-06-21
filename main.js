@@ -54,10 +54,32 @@ function draw() {
         }
     }
     for (let i = 0; i < cars.length; i++) {
-        cars[i].update();
+        if (mode == "play") {
+            cars[i].update();
+        }
         cars[i].draw(color(255, 0, 0, 20), 0);
     }
     bestCar.draw(color(0, 0, 255), 1);
+
+    if (mode == "pause") {
+        console.log("paused");
+        background(20, 100);
+        fill(255);
+        stroke(255);
+        textSize(100);
+        textAlign(CENTER);
+        text("PAUSED", 400, 350);
+    }
+}
+
+function start() {
+    if (mode != "play") {
+        mode = "play";
+        document.getElementById("startButton").innerHTML = "Stop";
+    } else {
+        mode = "pause";
+        document.getElementById("startButton").innerHTML = "Start";
+    }
 }
 
 function importMap(txt) {
@@ -87,6 +109,7 @@ function saveMap() {
 function removeMap() {
     localStorage.removeItem("map");
     walls = Walls.sideWalls(800, 600);
+    cheakpoints = [];
 }
 
 function saveBestNetwork() {
