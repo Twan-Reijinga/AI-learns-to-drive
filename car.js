@@ -6,7 +6,7 @@ class Car {
         this.height = height;
         this.angle = 0;
         this.speed = 0;
-        this.maxSpeed = 8;
+        this.maxSpeed = 10;
         this.acc = 2;
         this.friction = 0.5;
 
@@ -154,9 +154,13 @@ class Car {
     }
 
     #isToutchingCheakpoint() {
-        const nextCheakpoint = this.score % (cheakpoints.length - 1);
+        let nextCheakpoint = this.score % (cheakpoints.length - 1);
+        if (isNaN(nextCheakpoint)) {
+            nextCheakpoint = 0;
+        }
         if (
-            cheakpoints[nextCheakpoint].to &&
+            cheakpoints.length &&
+            Object.keys(cheakpoints[nextCheakpoint]).length > 1 &&
             isPolyLineIntersecting(this.#toPoly(), cheakpoints[nextCheakpoint])
         ) {
             return true;

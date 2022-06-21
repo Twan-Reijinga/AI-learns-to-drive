@@ -1,6 +1,6 @@
 class Cheakpoints {
     static enableDrawing() {
-        if (!cheakpoints[cheakpoints.length - 1].to) {
+        if (cheakpoints.length && !cheakpoints[cheakpoints.length - 1].to) {
             cheakpoints.pop();
         }
         setTimeout(() => {
