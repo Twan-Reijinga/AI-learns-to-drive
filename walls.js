@@ -3,9 +3,7 @@ class Walls {
         if (!walls[walls.length - 1].to) {
             walls.pop();
         }
-        setTimeout(() => {
-            mode = "wallBuild";
-        }, 1);
+        mode = "wallBuild";
     }
 
     static sideWalls(w, h) {
@@ -64,6 +62,7 @@ class Walls {
     }
 
     static build() {
+        if (mouseX < 0 || mouseY < 0) return;
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
         let lastCoord = walls[walls.length - 1].to;
 

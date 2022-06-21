@@ -8,9 +8,9 @@ function setup() {
     const height = 600;
 
     createCanvas(width, height);
-    frameRate(20);
+    frameRate(24);
     mode = "pause";
-    cars = Car.addCars(200, "AI");
+    cars = Car.addCars(20, "AI");
 
     walls = Walls.sideWalls(width, height);
 
@@ -49,7 +49,7 @@ function draw() {
         for (let i = 0; i < cars.length; i++) {
             cars[i].network = JSON.parse(bestNetwork);
             if (i != 0) {
-                Network.mutate(cars[i].network, 0.3);
+                Network.mutate(cars[i].network, 0.2);
             }
         }
     }
@@ -86,6 +86,7 @@ function saveMap() {
 
 function removeMap() {
     localStorage.removeItem("map");
+    walls = Walls.sideWalls(800, 600);
 }
 
 function saveBestNetwork() {

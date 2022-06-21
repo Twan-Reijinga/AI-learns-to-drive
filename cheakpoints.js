@@ -3,9 +3,7 @@ class Cheakpoints {
         if (cheakpoints.length && !cheakpoints[cheakpoints.length - 1].to) {
             cheakpoints.pop();
         }
-        setTimeout(() => {
-            mode = "cheakpointBuild";
-        }, 1);
+        mode = "cheakpointBuild";
     }
 
     static draw(color) {
@@ -50,6 +48,7 @@ class Cheakpoints {
     }
 
     static build() {
+        if (mouseX < 0 || mouseY < 0) return;
         const newCoord = { x: Math.round(mouseX), y: Math.round(mouseY) };
         if (cheakpoints.length) {
             var lastCoord = cheakpoints[cheakpoints.length - 1].to;

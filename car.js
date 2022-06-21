@@ -38,14 +38,12 @@ class Car {
     }
 
     update() {
-        this.timeSinceCheakpoint++;
         if (
             this.isCrashed ||
             this.#isCrashing() ||
-            (this.controlType == "AI" && this.timeSinceCheakpoint > 60)
+            (this.controlType == "AI" && this.timeSinceCheakpoint > 30)
         ) {
             this.isCrashed = true;
-            this.score = 0;
             return;
         }
         if (this.#isToutchingCheakpoint()) {
@@ -65,6 +63,7 @@ class Car {
             }
             this.#move();
         }
+        this.timeSinceCheakpoint++;
     }
 
     draw(color, isRayVisible) {
