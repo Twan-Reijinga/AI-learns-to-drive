@@ -1,57 +1,20 @@
-class Rays {
-    constructor(x, y, amount) {
-        this.rays = [];
-        this.addRays(x, y, amount);
-    }
-
-    rotate(rotation) {
-        for (let i = 0; i < this.rays.length; i++) {
-            this.rays[i].rotate(rotation);
-        }
-    }
-
-    changeLocation(x, y) {
-        for (let i = 0; i < this.rays.length; i++) {
-            this.rays[i].changeLocation(x, y);
-        }
-    }
-
-    addRays(x, y, amount) {
-        for (
-            let angle = HALF_PI;
-            angle <= HALF_PI + PI;
-            angle += PI / (amount - 1)
-        ) {
-            this.rays.push(new Ray(x, y, angle));
-        }
-    }
-
-    getDistances(objects) {
-        let distances = [];
-        for (let i = 0; i < this.rays.length; i++) {
-            let newDistance = this.rays[i].getDistance(objects);
-            distances.push(newDistance);
-        }
-        return distances;
-    }
-
-    getShortestDistance(objects) {
-        let distances = this.getDistances(objects);
-        return Math.min(...distances);
-    }
-
-    drawWallIntersections() {
-        for (let i = 0; i < this.rays.length; i++) {
-            this.rays[i].drawIntersection(walls);
-        }
-    }
-}
-
 class Ray {
     constructor(x, y, angle) {
         this.angle = 0;
         this.rotate(angle);
         this.changeLocation(x, y);
+    }
+
+    static addRays(x, y, amount) {
+        let rays = [];
+        for (
+            let angle = HALF_PI;
+            angle <= HALF_PI + PI;
+            angle += PI / (amount - 1)
+        ) {
+            rays.push(new Ray(x, y, angle));
+        }
+        return rays;
     }
 
     rotate(rotation) {

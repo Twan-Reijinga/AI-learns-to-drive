@@ -8,9 +8,9 @@ class Car {
         this.speed = 0;
         this.maxSpeed = 10;
         this.acc = 2;
-        this.friction = 0.5;
+        this.friction = 1;
 
-        this.rays = new Rays(x, y, rayCount);
+        this.rays = Ray.addRays(x, y, rayCount);
         this.isCrashed = false;
         this.score = 0;
         this.timeSinceCheakpoint = 0;
@@ -51,10 +51,16 @@ class Car {
             this.score++;
         }
         if (!this.isCrashed) {
-            this.rays.changeLocation(this.x, this.y);
+            for (let i = 0; i < this.rays.length; i++) {
+                this.rays[i].changeLocation(this.x, this.y);
+            }
             switch (this.controlType) {
                 case "AI":
-                    const distances = this.rays.getDistances(walls);
+                    let distances = [];
+                    for (let i = 0; i < this.rays.length; i++) {
+                        let newDistance = this.rays[i].getDistance(walls);
+                        distances.push(newDistance);
+                    }
                     this.#prossesNetworkControls(distances);
                     break;
                 case "Human":
@@ -68,7 +74,9 @@ class Car {
 
     draw(color, isRayVisible) {
         if (isRayVisible) {
-            this.rays.drawWallIntersections();
+            for (let i = 0; i < this.rays.length; i++) {
+                this.rays[i].drawIntersection(walls);
+            }
         }
         push();
         translate(this.x, this.y);
@@ -137,7 +145,9 @@ class Car {
 
     #rotate(rotation) {
         this.angle += rotation;
-        this.rays.rotate(rotation);
+        for (let i = 0; i < this.rays.length; i++) {
+            this.rays[i].rotate(rotation);
+        }
     }
 
     #isCrashing() {
