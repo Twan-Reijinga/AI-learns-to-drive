@@ -12,6 +12,7 @@ class Car {
 
         this.rays = Ray.addRays(x, y, rayCount);
         this.isCrashed = false;
+        this.currentCheakpoint = 0;
         this.score = 0;
         this.timeSinceCheakpoint = 0;
         this.controlType = controleType;
@@ -47,8 +48,9 @@ class Car {
             return;
         }
         if (this.#isToutchingCheakpoint()) {
+            this.currentCheakpoint++;
+            this.score += 1 + 1 / this.timeSinceCheakpoint;
             this.timeSinceCheakpoint = 0;
-            this.score++;
         }
         if (!this.isCrashed) {
             for (let i = 0; i < this.rays.length; i++) {
@@ -68,6 +70,9 @@ class Car {
                     break;
             }
             this.#move();
+        }
+        if (this.currentCheakpoint >= cheakpoints.length - 1) {
+            this.currentCheakpoint = 0;
         }
         this.timeSinceCheakpoint++;
     }
@@ -163,14 +168,13 @@ class Car {
     }
 
     #isToutchingCheakpoint() {
-        let nextCheakpoint = this.score % (cheakpoints.length - 1);
-        if (isNaN(nextCheakpoint)) {
-            nextCheakpoint = 0;
-        }
         if (
             cheakpoints.length &&
-            Object.keys(cheakpoints[nextCheakpoint]).length > 1 &&
-            isPolyLineIntersecting(this.#toPoly(), cheakpoints[nextCheakpoint])
+            Object.keys(cheakpoints[this.currentCheakpoint]).length > 1 &&
+            isPolyLineIntersecting(
+                this.#toPoly(),
+                cheakpoints[this.currentCheakpoint]
+            )
         ) {
             return true;
         }
