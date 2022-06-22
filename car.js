@@ -42,7 +42,7 @@ class Car {
         if (
             this.isCrashed ||
             this.#isCrashing() ||
-            (this.controlType == "AI" && this.timeSinceCheakpoint > 30)
+            (this.controlType == "AI" && this.timeSinceCheakpoint > 60)
         ) {
             this.isCrashed = true;
             return;
