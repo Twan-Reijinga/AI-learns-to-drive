@@ -18,7 +18,7 @@ class Car {
         this.controlType = controleType;
 
         if (controleType == "AI") {
-            this.network = new Network([rayCount, 6, 4]);
+            this.network = new Network([rayCount, 6, 6, 4]);
         }
         this.controls = new Controls();
         this.#rotate(-HALF_PI);
@@ -96,7 +96,7 @@ class Car {
     }
 
     #prossesNetworkControls(distances) {
-        const outputs = Network.getOutputs(this.network, distances);
+        const outputs = Network.feedForward(this.network, distances);
         this.controls.reset();
         if (outputs[0]) {
             this.controls.forward = true;

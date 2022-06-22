@@ -62,7 +62,6 @@ function draw() {
     bestCar.draw(color(0, 0, 255), 1);
 
     if (mode == "pause") {
-        console.log("paused");
         background(20, 100);
         fill(255);
         stroke(255);

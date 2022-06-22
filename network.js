@@ -7,10 +7,10 @@ class Network {
         }
     }
 
-    static getOutputs(network, inputs) {
-        let outputs = Layer.getOutputs(network.layers[0], inputs);
+    static feedForward(network, inputs) {
+        let outputs = Layer.feedForward(network.layers[0], inputs);
         for (let i = 1; i < network.layers.length; i++) {
-            outputs = Layer.getOutputs(network.layers[i], inputs);
+            outputs = Layer.feedForward(network.layers[i], inputs);
         }
         return outputs;
     }
@@ -59,7 +59,7 @@ class Layer {
         }
     }
 
-    static getOutputs(layer, inputs) {
+    static feedForward(layer, inputs) {
         let outputs = [];
         for (let i = 0; i < layer.outputCount; i++) {
             let sum = 0;
