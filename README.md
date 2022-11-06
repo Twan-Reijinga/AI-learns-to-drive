@@ -1,6 +1,6 @@
 # AI-learns-to-drive
 I made my own machine learning algorithm with reinforcement learning in JavaScript to let the AI drive a car in your own custom build circuit.
-[Try it now](https://ailearnstodrive.netlify.app/ "AI learns to drive DEMO")
+[Try it now](https://ai-learns-to-drive.netlify.app/ "AI learns to drive DEMO")
 
 ## How my AI works
 You need to pass on to the network how many nodes each layer must have with an array.
